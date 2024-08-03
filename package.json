@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.js",
+    "nodemon": "nodemon --exec \"npm run start\""
   },
   "type": "module",
   "keywords": [],
@@ -11,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "debug": "^4.3.6",
     "express": "^4.19.2",
     "morgan": "^1.10.0",
     "socket.io": "^4.7.5"
