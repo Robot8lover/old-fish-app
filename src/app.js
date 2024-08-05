@@ -18,15 +18,12 @@ const port = 3000;
 
 debug.enabled = true;
 
-import registerGameHandlers from "./gameHandler.js";
-
-const gameRooms = {};
-const users = {};
+import registerRoomHandlers from "./roomHandler.js";
 
 const onConnection = (socket) => {
   debug("a user connected");
 
-  registerGameHandlers(io, socket, gameRooms);
+  registerRoomHandlers(io, socket);
 };
 
 const onSocketError = (err) => {
