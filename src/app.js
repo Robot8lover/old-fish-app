@@ -6,8 +6,8 @@ import http from "http";
 import debugModule from "debug";
 const debug = debugModule("fish-app:server");
 
-import { fileURLToPath } from 'node:url';
-import { dirname, join } from 'node:path';
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -18,25 +18,31 @@ const port = 3000;
 
 debug.enabled = true;
 
-io.on('connection', (socket) => {
-  debug('a user connected');
+import registerGameHandlers from "./gameHandler.js";
 
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', (data) => {
-    debug(data);
-  });
-});
+const gameRooms = {};
+const users = {};
 
-io.on('error', (err) => {
-  debug('error with socket io:', err);
-});
+const onConnection = (socket) => {
+  debug("a user connected");
+
+  registerGameHandlers(io, socket, gameRooms);
+};
+
+const onSocketError = (err) => {
+  console.log("error with socket io:", err);
+};
+
+io.on("connection", onConnection);
+
+io.on("error", onSocketError);
 
 
-app.use(logger('dev'));
+app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(express.static(path.join(path.dirname(__dirname), 'public')));
+app.use(express.static(path.join(path.dirname(__dirname), "public")));
 
 
 
@@ -44,7 +50,7 @@ app.set("port", port);
 const server = http.createServer(app);
 
 server.listen(port);
-server.on('listening', onListening);
+server.on("listening", onListening);
 
 io.attach(server)
 
@@ -53,8 +59,8 @@ io.attach(server)
  */
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  var bind = typeof addr === "string"
+    ? "pipe " + addr
+    : "port " + addr.port;
+  debug("Listening on " + bind);
 }
