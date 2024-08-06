@@ -1,7 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { validateCard } from "./cards.js";
 import ASK_DELAY from "../public/shared_js/ASK_DELAY.js";
-import { log } from "node:console";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
 
@@ -23,6 +22,8 @@ const createGame = (gameId, maxPlayers) => {
     maxPlayers,
     hands: [],
     nextAskTime: 0,
+    host: "",
+    playing: false,
   };
 };
 
@@ -36,6 +37,10 @@ const createUser = (userId) => {
 const registerPlayHandlers = (io, socket) => {
   const userId = socket.id;
 
+  const emitToGame = (gameId, eventName, ...args) => {
+    socket.to(gameId2room(gameId)).emit(eventName, eventName, ...args)
+  }
+
   socket.on("game:play:ask", (gameId, card, target) => {
     if (game.nextAskTime > Date.now()) {
       // must wait to make next ask
@@ -45,6 +50,11 @@ const registerPlayHandlers = (io, socket) => {
     const game = games[gameId];
     if (!game) {
       // game does not exist
+      return;
+    }
+
+    if (!game.playing) {
+      // game is not being played
       return;
     }
 
@@ -76,16 +86,12 @@ const registerPlayHandlers = (io, socket) => {
       // successful ask
       game.hands[target].delete(card);
       game.hands[seat].add(card);
-      socket
-        .to(gameId2room(gameId))
-        .emit("game:play:ask success", card, seat, target);
+      emitToGame(gameId, "game:play:ask success", card, seat, target)
     } else {
       // target player does not have card
       // unsuccessful ask
-      socket
-        .to(gameId2room(gameId))
-        .emit("game:play:ask fail", card, seat, target);
-      socket.to(gameId2room(gameId)).emit("game:play:transfer", seat, target);
+      emitToGame(gameId, "game:play:ask fail", card, seat, target)
+      emitToGame(gameId, "game:play:transfer", seat, target);
       game.turn = target;
     }
 
@@ -99,6 +105,11 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
+    if (!game.playing) {
+      // game is not being played
+      return;
+    }
+
     const seat = game.players.indexOf(userId);
     if (seat === -1) {
       // player not in the game
@@ -108,13 +119,9 @@ const registerPlayHandlers = (io, socket) => {
     const result = declareSuccess(game.hands, declaration);
     applyDeclare(game.hands, declaration);
     if (result) {
-      socket
-        .to(gameId2room(gameId))
-        .emit("game:play:declare success", declaration, seat);
+      emitToGame(gameId, "game:play:declare success", declaration, seat);
     } else {
-      socket
-        .to(gameId2room(gameId))
-        .emit("game:play:declare fail", declaration, seat);
+      emitToGame(gameId, "game:play:declare fail", declaration, seat);
     }
   });
 
@@ -122,6 +129,11 @@ const registerPlayHandlers = (io, socket) => {
     const game = games[gameId];
     if (!game) {
       // game does not exist
+      return;
+    }
+
+    if (!game.playing) {
+      // game is not being played
       return;
     }
 
@@ -150,9 +162,31 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    socket.to(gameId2room(gameId)).emit("game:play:transfer", seat, target);
+    emitToGame(gameId, "game:play:transfer", seat, target);
     game.turn = target;
   });
+
+  socket.on("game:play:start", (gameId) => {
+    const game = games[gameId];
+    if (!game) {
+      // game does not exist
+      return;
+    }
+
+    if (game.playing) {
+      // game is already playing
+      // no need to continue
+      return;
+    }
+
+    if (game.host !== userId) {
+      // player is not host
+      return;
+    }
+
+    game.playing = true;
+    emitToGame(gameId, "game:play:start");
+  })
 };
 
 const registerGameHandlers = (io, socket) => {
@@ -175,7 +209,7 @@ const registerGameHandlers = (io, socket) => {
   }
   */
 
-  const leaveGame = () => {
+  const leaveGame = (assignHost=false) => {
     if (user.gameId) {
       socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
@@ -184,6 +218,9 @@ const registerGameHandlers = (io, socket) => {
       if (prevGame.players.every((v) => v === "")) {
         // no players left
         delete games[user.gameId];
+      } else if (assignHost && prevGame.host === userId) {
+        // assign new host if player was host
+        prevGame.host = prevGame.players.find((element) => (element !== ""));
       }
 
       user.gameId = "";
@@ -208,9 +245,10 @@ const registerGameHandlers = (io, socket) => {
         gameId = randomBytes(3).toString("hex");
       } while (games[gameId]);
 
-      games[gameId] = createGame(gameId, maxPlayers);
-
+      const game = createGame(gameId, maxPlayers);
+      games[gameId] = game;
       joinGame(gameId);
+      game.host = userId;
     } catch (err) {
       console.error("An error occurred during game creation", err);
     }
@@ -224,10 +262,10 @@ const registerGameHandlers = (io, socket) => {
   });
 
   socket.on("game:leave", () => {
-    leaveGame();
+    leaveGame(true);
   });
   socket.on("disconnect", (reason) => {
-    leaveGame();
+    leaveGame(false);
   });
 };
 
