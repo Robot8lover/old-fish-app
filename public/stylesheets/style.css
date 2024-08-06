@@ -1,9 +1,22 @@
 body {
-    padding: 50px;
-    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  }
-  
-  a {
-    color: #00B7FF;
-  }
-  
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00b7ff;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.page-container {
+  width: 100%;
+}
+
+#join-page {
+  display: flex;
+  flex-flow: row wrap; /* equivalent to flex-direction and flex-wrap */
+  justify-content: space-around;
+}
