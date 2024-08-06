@@ -5,9 +5,9 @@ import ASK_DELAY from "../shared_js/ASK_DELAY.js";
 const onLoad = () => {
   const joinPage = document.getElementById("join-page");
   const gamePage = document.getElementById("game-page");
-  const createGameBtn = document.getElementById("create-btn");
   const gameIdInput = document.getElementById("game-id-in");
-  const joinGameBtn = document.getElementById("join-btn");
+  const createGameForm = document.getElementById("create-form");
+  const joinGameForm = document.getElementById("join-form");
 
   const socket = io();
 
@@ -28,9 +28,12 @@ const onLoad = () => {
     document.getElementById("game-id-span").textContent = gameId;
   });
 
-  createGameBtn.addEventListener(
-    "click",
-    () => {
+  createGameForm.addEventListener(
+    "submit",
+    (event) => {
+      event.preventDefault();
+
+      /*
       let maxPlayers = 0;
       for (const element of document.getElementsByName("max-players")) {
         if (element.checked) {
@@ -38,17 +41,22 @@ const onLoad = () => {
           break;
         }
       }
+      */
+      const maxPlayers = +createGameForm.elements["max-players"].value;
       if (maxPlayers === 0) {
         return;
       }
+
       socket.emit("game:create", maxPlayers);
     },
     false
   );
 
-  joinGameBtn.addEventListener(
-    "click",
-    () => {
+  joinGameForm.addEventListener(
+    "submit",
+    (event) => {
+      event.preventDefault();
+
       socket.emit("game:join", gameIdInput.value);
     },
     false
@@ -105,6 +113,9 @@ const onLoad = () => {
       drawPlayers();
     }
   );
+
+
 };
+
 
 document.addEventListener("DOMContentLoaded", onLoad, false);
