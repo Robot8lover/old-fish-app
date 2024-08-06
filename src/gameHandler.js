@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
-import { validateCard } from "./cards"
-import ASK_DELAY from "../public/javascripts/ASK_DELAY";
+import { validateCard } from "./cards.js";
+import ASK_DELAY from "../public/javascripts/ASK_DELAY.js";
+import { log } from "node:console";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
 
@@ -12,12 +13,12 @@ const swapSeats = (gameId, seat1, seat2) => {
   [players[seat1], players[seat2]] = [players[seat2], players[seat1]];
 };
 
-const gameId2room = (gameId) => (`game:${gameId}`);
+const gameId2room = (gameId) => `game:${gameId}`;
 
 const createGame = (gameId, maxPlayers) => {
   return {
     id: gameId,
-    players: new Array(maxPlayers),
+    players: new Array(maxPlayers).fill(""),
     turn: -1,
     maxPlayers,
     hands: [],
@@ -59,7 +60,7 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    if ((target % 2) === (seat % 2)) {
+    if (target % 2 === seat % 2) {
       // player and target on same team
       return;
     }
@@ -74,11 +75,15 @@ const registerPlayHandlers = (io, socket) => {
       // successful ask
       game.hands[target].delete(card);
       game.hands[seat].add(card);
-      socket.to(gameId2room(gameId)).emit("game:play:ask success", card, seat, target);
+      socket
+        .to(gameId2room(gameId))
+        .emit("game:play:ask success", card, seat, target);
     } else {
       // target player does not have card
       // unsuccessful ask
-      socket.to(gameId2room(gameId)).emit("game:play:ask fail", card, seat, target);
+      socket
+        .to(gameId2room(gameId))
+        .emit("game:play:ask fail", card, seat, target);
     }
 
     game.nextAskTime = time + ASK_DELAY;
@@ -109,17 +114,34 @@ const registerGameHandlers = (io, socket) => {
   }
   */
 
-  const joinGame = (gameId) => {
+  const leaveGame = () => {
     if (user.gameId) {
+      console.log(user.gameId)
+      console.log(games);
       socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
-      prevGame.players[prevGame.players.indexOf(userId)] = undefined;
+      prevGame.players[prevGame.players.indexOf(userId)] = "";
+
+      if (prevGame.players.every(v => (v === ""))) {
+        // no players left
+        console.log(`Deleted game ${user.gameId}`);
+        delete games[user.gameId];
+      }
+
+      user.gameId = "";
     }
+  };
+
+  const joinGame = (gameId) => {
+    leaveGame();
+
     const game = games[gameId];
     socket.join(gameId2room(gameId));
-    game.players[game.players.indexOf(undefined)] = userId;
+    game.players[game.players.indexOf("")] = userId;
     user.gameId = gameId;
-  }
+
+    socket.emit("game:join", gameId);
+  };
 
   socket.on("game:create", (maxPlayers) => {
     try {
@@ -131,8 +153,6 @@ const registerGameHandlers = (io, socket) => {
       games[gameId] = createGame(gameId, maxPlayers);
 
       joinGame(gameId);
-
-      io.emit("game:create", gameId);
     } catch (err) {
       console.error("An error occurred during game creation", err);
     }
@@ -142,11 +162,18 @@ const registerGameHandlers = (io, socket) => {
     const game = games[gameId];
     if (
       game &&
-      game.players.includes(undefined) &&
+      game.players.includes("") &&
       !game.players.includes(userId)
     ) {
       joinGame(gameId);
     }
+  });
+
+  socket.on("game:leave", () => {
+    leaveGame();
+  });
+  socket.on("disconnect", (reason) => {
+    leaveGame();
   });
 };
 
