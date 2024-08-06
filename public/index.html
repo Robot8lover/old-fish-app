@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="stylesheets/style.css" />
     <script src="/socket.io/socket.io.js"></script>
-    <script src="javascripts/game-script.js"></script>
+    <script type="module" src="javascripts/game-script.js"></script>
     <title>Game</title>
   </head>
   <body>
-    <div id="join-page" div="page-container">
+    <div id="join-page" class="page-container">
       <div id="create-container">
         <fieldset>
           <legend>Number of players</legend>
@@ -27,7 +27,7 @@
             <input
               type="radio"
               name="max-players"
-              id="players-6"
+              id="players-8"
               value="8"
             />
             8
@@ -43,6 +43,8 @@
       </div>
     </div>
 
-    <div id="game-page" div="page-container" hidden></div>
+    <div id="game-page" div="page-container" class="hidden">
+      <div>Game Id: <span id="game-id-span"></span></div>
+    </div>
   </body>
 </html>
