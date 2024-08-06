@@ -21,9 +21,7 @@ debug.enabled = true;
 import registerGameHandlers from "./gameHandler.js";
 
 const onConnection = (socket) => {
-  debug("a user connected");
-
-  registerRoomHandlers(io, socket);
+  registerGameHandlers(io, socket);
 };
 
 const onSocketError = (err) => {
