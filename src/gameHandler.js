@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { validateCard } from "./cards.js";
-import ASK_DELAY from "../public/javascripts/ASK_DELAY.js";
+import ASK_DELAY from "../public/shared_js/ASK_DELAY.js";
 import { log } from "node:console";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
