@@ -20,3 +20,13 @@ a {
   flex-flow: row wrap; /* equivalent to flex-direction and flex-wrap */
   justify-content: space-around;
 }
+
+#leave-btn {
+  position: absolute;
+  left: 0rem;
+}
+
+#game-id-div {
+  position: absolute;
+  right: 0rem;
+}
