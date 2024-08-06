@@ -1,14 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="stylesheets/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
     <script src="/socket.io/socket.io.js"></script>
     <script src="javascripts/game-script.js"></script>
     <title>Game</title>
-</head>
-<body>
-    
-</body>
+  </head>
+  <body>
+    <div id="join-page" div="page-container">
+      <div id="create-container">
+        <fieldset>
+          <legend>Number of players</legend>
+          <label for="players-6">
+            <input
+              type="radio"
+              name="max-players"
+              id="players-6"
+              value="6"
+              checked
+            />
+            6
+          </label>
+          <label for="players-8">
+            <input
+              type="radio"
+              name="max-players"
+              id="players-6"
+              value="8"
+            />
+            8
+          </label>
+        </fieldset>
+        <br />
+        <button type="button" id="create-game">Create a game!</button>
+      </div>
+      <div id="join-container">
+        <input type="text" name="game-id" id="game-id" />
+        <br />
+        <button type="button" id="join-game">Join a game!</button>
+      </div>
+    </div>
+
+    <div id="game-page" div="page-container" hidden></div>
+  </body>
 </html>
