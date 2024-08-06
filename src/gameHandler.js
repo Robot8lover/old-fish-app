@@ -37,8 +37,7 @@ const registerPlayHandlers = (io, socket) => {
   const userId = socket.id;
 
   socket.on("game:play:ask", (gameId, card, target) => {
-    const time = Date.now();
-    if (game.nextAskTime > time) {
+    if (game.nextAskTime > Date.now()) {
       // must wait to make next ask
       return;
     }
@@ -70,6 +69,8 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
+    // TODO: add card held in half suit check
+
     if (game.hands[target].has(card)) {
       // target player has card
       // successful ask
@@ -84,14 +85,74 @@ const registerPlayHandlers = (io, socket) => {
       socket
         .to(gameId2room(gameId))
         .emit("game:play:ask fail", card, seat, target);
+      socket.to(gameId2room(gameId)).emit("game:play:transfer", seat, target);
+      game.turn = target;
     }
 
-    game.nextAskTime = time + ASK_DELAY;
+    game.nextAskTime = Date.now() + ASK_DELAY;
   });
 
-  socket.on("game:play:declare", (gameId, declaration) => {});
+  socket.on("game:play:declare", (gameId, declaration) => {
+    const game = games[gameId];
+    if (!game) {
+      // game does not exist
+      return;
+    }
 
-  socket.on("game:play:transfer", (gameId, target) => {});
+    const seat = game.players.indexOf(userId);
+    if (seat === -1) {
+      // player not in the game
+      return;
+    }
+
+    const result = declareSuccess(game.hands, declaration);
+    applyDeclare(game.hands, declaration);
+    if (result) {
+      socket
+        .to(gameId2room(gameId))
+        .emit("game:play:declare success", declaration, seat);
+    } else {
+      socket
+        .to(gameId2room(gameId))
+        .emit("game:play:declare fail", declaration, seat);
+    }
+  });
+
+  socket.on("game:play:transfer", (gameId, target) => {
+    const game = games[gameId];
+    if (!game) {
+      // game does not exist
+      return;
+    }
+
+    const seat = game.players.indexOf(userId);
+    if (seat !== game.turn) {
+      // not player's turn
+      return;
+    }
+
+    if (game.hands[seat].size > 0) {
+      // player still has cards left
+      return;
+    }
+
+    const team = seat % 2;
+    if (target % 2 !== team) {
+      if (game.hands.any((v, i) => i % 2 === team && v.size > 0)) {
+        // player and target on different teams
+        // and player's team has cards left
+        return;
+      }
+    }
+
+    if (game.hands[target].size === 0) {
+      // target does not have any cards left
+      return;
+    }
+
+    socket.to(gameId2room(gameId)).emit("game:play:transfer", seat, target);
+    game.turn = target;
+  });
 };
 
 const registerGameHandlers = (io, socket) => {
@@ -116,13 +177,13 @@ const registerGameHandlers = (io, socket) => {
 
   const leaveGame = () => {
     if (user.gameId) {
-      console.log(user.gameId)
+      console.log(user.gameId);
       console.log(games);
       socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
       prevGame.players[prevGame.players.indexOf(userId)] = "";
 
-      if (prevGame.players.every(v => (v === ""))) {
+      if (prevGame.players.every((v) => v === "")) {
         // no players left
         console.log(`Deleted game ${user.gameId}`);
         delete games[user.gameId];
@@ -160,11 +221,7 @@ const registerGameHandlers = (io, socket) => {
 
   socket.on("game:join", (gameId) => {
     const game = games[gameId];
-    if (
-      game &&
-      game.players.includes("") &&
-      !game.players.includes(userId)
-    ) {
+    if (game && game.players.includes("") && !game.players.includes(userId)) {
       joinGame(gameId);
     }
   });
