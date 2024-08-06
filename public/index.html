@@ -24,27 +24,27 @@
             6
           </label>
           <label for="players-8">
-            <input
-              type="radio"
-              name="max-players"
-              id="players-8"
-              value="8"
-            />
+            <input type="radio" name="max-players" id="players-8" value="8" />
             8
           </label>
         </fieldset>
         <br />
-        <button type="button" id="create-game">Create a game!</button>
+        <button type="button" id="create-btn">Create a game!</button>
       </div>
       <div id="join-container">
-        <input type="text" name="game-id" id="game-id" />
+        <label for="game-id-in">
+          Game ID:
+          <input type="text" name="game-id" id="game-id-in" />
+        </label>
         <br />
-        <button type="button" id="join-game">Join a game!</button>
+        <button type="button" id="join-btn">Join a game!</button>
       </div>
     </div>
 
     <div id="game-page" div="page-container" class="hidden">
-      <div>Game Id: <span id="game-id-span"></span></div>
+      <button type="button" id="leave-btn">Leave game</button>
+
+      <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
     </div>
   </body>
 </html>
