@@ -177,15 +177,12 @@ const registerGameHandlers = (io, socket) => {
 
   const leaveGame = () => {
     if (user.gameId) {
-      console.log(user.gameId);
-      console.log(games);
       socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
       prevGame.players[prevGame.players.indexOf(userId)] = "";
 
       if (prevGame.players.every((v) => v === "")) {
         // no players left
-        console.log(`Deleted game ${user.gameId}`);
         delete games[user.gameId];
       }
 
