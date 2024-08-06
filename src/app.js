@@ -18,7 +18,7 @@ const port = 3000;
 
 debug.enabled = true;
 
-import registerRoomHandlers from "./roomHandler.js";
+import registerGameHandlers from "./gameHandler.js";
 
 const onConnection = (socket) => {
   debug("a user connected");
