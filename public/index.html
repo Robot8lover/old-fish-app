@@ -10,7 +10,7 @@
   </head>
   <body>
     <div id="join-page" class="page-container">
-      <div id="create-container">
+      <form id="create-form">
         <fieldset>
           <legend>Number of players</legend>
           <label for="players-6">
@@ -29,22 +29,26 @@
           </label>
         </fieldset>
         <br />
-        <button type="button" id="create-btn">Create a game!</button>
-      </div>
-      <div id="join-container">
+        <button type="submit" id="create-btn">Create a game!</button>
+      </form>
+      <form id="join-form">
         <label for="game-id-in">
           Game ID:
           <input type="text" name="game-id" id="game-id-in" />
         </label>
         <br />
-        <button type="button" id="join-btn">Join a game!</button>
-      </div>
+        <button type="submit" id="join-btn">Join a game!</button>
+      </form>
     </div>
 
     <div id="game-page" div="page-container" class="hidden">
       <div class="banner">
         <button type="button" id="leave-btn">Leave game</button>
         <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
+      </div>
+
+      <div id="host-bar">
+        <button type="button"></button>
       </div>
 
       <div class="game-body">
