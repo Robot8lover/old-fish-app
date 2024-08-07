@@ -13,19 +13,31 @@ const swapSeats = (gameId, seat1, seat2) => {
 };
 
 const gameId2room = (gameId) => `game:${gameId}`;
+const userId2room = (userId) => `user:${userId}`
 
-const createGame = (gameId, maxPlayers) => {
-  return {
-    id: gameId,
-    players: new Array(maxPlayers).fill(""),
+const resetGame = (gameId) => {
+  const game = games[gameId];
+  games[gameId] = {
+    ...game,
     turn: -1,
-    maxPlayers,
-    hands: [],
+    hands: new Array(game.maxPlayers),
     nextAskTime: 0,
-    host: "",
     playing: false,
-  };
+    declared: [],
+  }
 };
+
+const createGame = (gameId, maxPlayers) => ({
+  id: gameId,
+  players: new Array(maxPlayers).fill(""),
+  turn: -1,
+  maxPlayers,
+  hands: new Array(maxPlayers),
+  nextAskTime: 0,
+  host: "",
+  playing: false,
+  declared: [],
+});
 
 const createUser = (userId) => {
   return {
@@ -184,14 +196,23 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
+    if (game.players.any((v) => (v === ""))) {
+      // game is not filled
+      return;
+    }
+
     game.playing = true;
-    emitToGame(gameId, "game:play:start");
+    game.players.forEach((playerId, i) => {
+      socket.emit(userId2room(playerId), "game:play:start", {}, hand, i);
+    });
   })
 };
 
 const registerGameHandlers = (io, socket) => {
   const userId = socket.id;
   const user = users[userId];
+
+  socket.join(userId2room(userId));
 
   /*
   const leaveAllGames = () => {
