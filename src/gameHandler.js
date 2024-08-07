@@ -136,6 +136,11 @@ const registerPlayHandlers = (io, socket) => {
     } else {
       emitToGame(gameId, "game:play:declare fail", declaration, seat);
     }
+
+    if (game.hands.every((hand) => (hand.size === 0))) {
+      game.playing = false;
+      emitToGame(gameId, "game:play:end"); // let them compute result i guess?
+    }
   });
 
   socket.on("game:play:transfer", (gameId, target) => {
