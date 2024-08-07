@@ -27,6 +27,8 @@ const onLoad = () => {
 
   const convertSeatPos = (pos) => (pos + maxPlayers - seat) % maxPlayers;
 
+  const drawPlayers = () => {};
+
   socket.on("game:join", (gameId, maxPlayers, seat) => {
     joinPage.classList.add("hidden");
     gamePage.classList.remove("hidden");
@@ -45,6 +47,8 @@ const onLoad = () => {
     game = createGame(maxPlayers);
     game.maxPlayers = maxPlayers;
     game.seat = seat;
+
+    drawPlayers();
   });
 
   createGameForm.addEventListener(
@@ -120,7 +124,10 @@ const onLoad = () => {
     game.hand = hand;
   };
 
-  const drawPlayers = () => {};
+
+  const drawHands = () => {};
+  const drawSelfHand = () => {};
+  const drawTurn = () => {};
 
   socket.on(
     "game:play:start",
@@ -128,13 +135,22 @@ const onLoad = () => {
       setHand(hand);
       if (declared) {
         declared.forEach(addDeclared);
+        drawDeclared();
       }
       handCounts.forEach(setHandCount);
       setTurn(turn);
 
-      drawPlayers();
+      drawHands();
+      drawSelfHand();
+      drawTurn();
     }
   );
+
+  const drawEnd = () => {};
+
+  socket.on("game:play:end", () => {
+    drawResult();
+  });
 };
 
 document.addEventListener("DOMContentLoaded", onLoad, false);
