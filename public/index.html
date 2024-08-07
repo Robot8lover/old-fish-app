@@ -47,11 +47,34 @@
         <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
       </div>
 
-      <div id="host-bar">
-        <button type="button"></button>
+      <div id="host-bar" class="hidden">
+        <button type="button">Start</button>
       </div>
 
       <div class="game-body">
+        <div class="game-left">
+          <!-- area for play and display of players and plays -->
+
+          <!--
+            - is empty
+            p is player in 6 or 8
+            s is self (player)
+            d is part of display area
+            6 is player in 6
+            8 is player in 8
+
+            ---p---
+            8-----8
+            --ddd--
+            6-ddd-6
+            --ddd--
+            8-----8
+            ---s---
+          -->
+        </div>
+        <div class="game-right">
+          <!-- area for declaring -->
+        </div>
       </div>
     </div>
   </body>
