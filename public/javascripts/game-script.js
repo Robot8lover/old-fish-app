@@ -1,6 +1,6 @@
 "use strict";
 
-import ASK_DELAY from "../shared_js/ASK_DELAY.js";
+import { ASK_DELAY, NAME_LEN } from "../shared_js/constants.js";
 
 const onLoad = () => {
   const joinPage = document.getElementById("join-page");
