@@ -8,6 +8,8 @@ const onLoad = () => {
   const gameIdInput = document.getElementById("game-id-in");
   const createGameForm = document.getElementById("create-form");
   const joinGameForm = document.getElementById("join-form");
+  const playerSelf = document.getElementById("player-self");
+  let players = null;
 
   const socket = io();
 
@@ -35,12 +37,10 @@ const onLoad = () => {
         element.classList.add("hidden");
       }
     );
-    Array.prototype.forEach.call(
-      document.getElementsByClassName(`player-${maxPlayers}`),
-      (element) => {
+    (players = document.getElementsByClassName(`player-${maxPlayers}`)),
+      Array.prototype.forEach.call(players, (element) => {
         element.classList.remove("hidden");
-      }
-    );
+      });
 
     game = createGame(maxPlayers);
     game.maxPlayers = maxPlayers;

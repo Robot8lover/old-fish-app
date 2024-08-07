@@ -55,7 +55,7 @@ a {
     8-ddd-8
     --ddd--
     p-----p
-    ---s---
+    --sss--
   */
 
   --grid-dim: 7;
@@ -68,7 +68,7 @@ a {
 }
 
 #player-self {
-  grid-column: var(--grid-half-dim);
+  grid-column: var(--grid-half-dim) - 1, span 2;
   grid-row: -1;
 }
 
