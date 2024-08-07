@@ -168,7 +168,7 @@ const registerPlayHandlers = (io, socket) => {
 
     const team = seat % 2;
     if (target % 2 !== team) {
-      if (game.hands.any((v, i) => i % 2 === team && v.size > 0)) {
+      if (game.hands.some((v, i) => i % 2 === team && v.size > 0)) {
         // player and target on different teams
         // and player's team has cards left
         return;
@@ -202,7 +202,7 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    if (game.players.any((v) => v === "")) {
+    if (game.players.some((v) => v === "")) {
       // game is not filled
       return;
     }
@@ -249,7 +249,7 @@ const registerPlayHandlers = (io, socket) => {
 
     game.names[seat] = name;
 
-    emitToGame(gameId, "game:play:change name", seat, name);
+    socket.to(gameId2room(gameId)).emit("game:play:change name", seat, name);
   });
 };
 
@@ -349,4 +349,11 @@ export default (io, socket) => {
 
   registerGameHandlers(io, socket);
   registerPlayHandlers(io, socket);
+
+  /*
+  // for debugging
+  socket.onAny((event, ...args) => {
+    console.log(`Event: "${event}"`, args);
+  });
+  //*/
 };

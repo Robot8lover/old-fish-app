@@ -42,7 +42,7 @@
     </div>
 
     <div id="game-page" div="page-container" class="hidden">
-      <div class="game-banner">
+      <div id="game-banner">
         <div id="game-banner-left">
           <button type="button" id="leave-btn">Leave game</button>
           <button type="button" id="start-btn" class="host">Start</button>
@@ -52,8 +52,8 @@
         </div>
       </div>
 
-      <div class="game-body">
-        <div class="game-left">
+      <div id="game-body">
+        <div id="game-left">
           <!-- area for play and display of players and plays -->
 
           <!--
@@ -75,7 +75,12 @@
 
           <div id="player-self" class="player player-6 player-8">
             <div class="name-div">
-              <input id="self-name" class="player-name" />
+              <input
+                type="text"
+                name="self-name"
+                id="self-name"
+                class="player-name"
+              />
             </div>
             <div id="self-cards" class="player-cards"></div>
             <div class="player-turn" class="hidden"></div>
@@ -132,7 +137,7 @@
 
           <div id="play-area"></div>
         </div>
-        <div class="game-right">
+        <div id="game-right">
           <!-- area for declaring -->
         </div>
       </div>

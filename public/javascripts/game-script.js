@@ -9,21 +9,24 @@ const onLoad = () => {
   const createGameForm = document.getElementById("create-form");
   const joinGameForm = document.getElementById("join-form");
   const playerSelf = document.getElementById("player-self");
+  const selfName = document.getElementById("self-name");
+  const startBtn = document.getElementById("start-btn");
 
   const socket = io();
 
-  let game = null;
-  let players = null;
-
   const createGame = (maxPlayers) => ({
+    gameId: "",
     maxPlayers: 0,
     declared: [],
     handCounts: new Array(maxPlayers).fill(0),
-    names: new Array(maxPlayers).fill(""),
     seat: -1,
     hand: null,
     turn: -1,
   });
+
+  let game = createGame(0);
+  let host = false;
+  let players = [""];
 
   const escapeHtml = (() => {
     const MAP = {
@@ -34,8 +37,12 @@ const onLoad = () => {
       "'": "&#039;",
     };
 
-    return (text) => {
-      return text.replace(/[&<>"']/g, (m) => MAP[m]);
+    return (text, replaceWhitespace = false) => {
+      if (replaceWhitespace) {
+        return text.replace(/\s/g, " ").replace(/[&<>"']/g, (m) => MAP[m]);
+      } else {
+        return text.replace(/[&<>"']/g, (m) => MAP[m]);
+      }
     };
   })();
 
@@ -61,6 +68,7 @@ const onLoad = () => {
       });
 
     game = createGame(maxPlayers);
+    game.gameId = gameId;
     game.maxPlayers = maxPlayers;
     game.seat = seat;
 
@@ -87,6 +95,7 @@ const onLoad = () => {
       }
 
       socket.emit("game:create", maxPlayers);
+      host = true;
       Array.prototype.forEach.call(
         document.getElementsByClassName("host"),
         (element) => {
@@ -103,6 +112,7 @@ const onLoad = () => {
       event.preventDefault();
 
       socket.emit("game:join", gameIdInput.value);
+      host = false;
       Array.prototype.forEach.call(
         document.getElementsByClassName("host"),
         (element) => {
@@ -147,6 +157,8 @@ const onLoad = () => {
   socket.on(
     "game:play:start",
     ({ declared, hands: handCounts, turn }, hand) => {
+      startBtn.classList.add("hidden");
+
       setHand(hand);
       if (declared) {
         declared.forEach(addDeclared);
@@ -161,22 +173,43 @@ const onLoad = () => {
     }
   );
 
+  startBtn.addEventListener("click", () => {
+    socket.emit("game:play:start", game.gameId);
+  });
+
   const drawResult = () => {};
 
   socket.on("game:play:end", () => {
     drawResult();
   });
 
-  const drawNames = () => {
-    for (let i = 1; i < game.maxPlayers; i += 1) {
-      const player = players[i];
-    }
-  };
-
   socket.on("game:play:change name", (seat, name) => {
-    names[seat] = name;
-    drawNames();
+    if (seat === game.seat) {
+      // self name so do not make an update
+      return;
+    }
+    players[convertSeatPos(seat)].getElementsByClassName(
+      "player-name"
+    )[0].textContent = escapeHtml(name, true);
+    // FIXME: We do not need to escape if we use escapeHTML.
+    // FIXME: Possibly still add support for whitespace stuff.
   });
+
+  selfName.maxlength = NAME_LEN;
+  selfName.addEventListener(
+    "change",
+    () => {
+      socket.emit("game:play:change name", game.gameId, selfName.value);
+    },
+    false
+  );
+
+  /*
+  // for debugging
+  socket.onAny((event, ...args) => {
+    console.log(`Event "${event}"`, args);
+  });
+  //*/
 };
 
 document.addEventListener("DOMContentLoaded", onLoad, false);
