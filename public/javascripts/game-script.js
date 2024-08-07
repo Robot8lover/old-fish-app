@@ -9,11 +9,11 @@ const onLoad = () => {
   const createGameForm = document.getElementById("create-form");
   const joinGameForm = document.getElementById("join-form");
   const playerSelf = document.getElementById("player-self");
-  let players = null;
 
   const socket = io();
 
   let game = null;
+  let players = null;
 
   const createGame = (maxPlayers) => ({
     maxPlayers: 0,
@@ -25,7 +25,25 @@ const onLoad = () => {
     turn: -1,
   });
 
-  const convertSeatPos = (pos) => (pos + maxPlayers - seat) % maxPlayers;
+  const escapeHtml = ((() => {
+    const MAP = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;',
+    };
+
+    return ((text) => {
+      return text.replace(
+        /[&<>"']/g,
+        (m) => MAP[m]
+      );
+    });
+  })());
+
+  const convertSeatPos = (pos) => (pos + game.maxPlayers - game.seat) % game.maxPlayers;
+  const unconvertSeatPos = (pos) => (pos + game.seat) % game.maxPlayers;
 
   const drawPlayers = () => {};
 
@@ -146,10 +164,21 @@ const onLoad = () => {
     }
   );
 
-  const drawEnd = () => {};
+  const drawResult = () => {};
 
   socket.on("game:play:end", () => {
     drawResult();
+  });
+
+  const drawNames = () => {
+    for (let i = 1; i < game.maxPlayers; i += 1) {
+      const player = players[i];
+    }
+  };
+
+  socket.on("game:play:change name", (seat, name) => {
+    names[seat] = name;
+    drawNames();
   });
 };
 
