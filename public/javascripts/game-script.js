@@ -15,6 +15,7 @@ const onLoad = () => {
   let game = null;
 
   const createGame = (maxPlayers) => ({
+    maxPlayers: 0,
     declared: [],
     handCounts: new Array(maxPlayers).fill(0),
     names: new Array(maxPlayers).fill(""),
@@ -23,10 +24,24 @@ const onLoad = () => {
     turn: -1,
   });
 
-  socket.on("game:join", (gameId) => {
+  convertSeatPos = (pos) => (pos + maxPlayers - seat) % maxPlayers;
+
+  socket.on("game:join", (gameId, maxPlayers, seat) => {
     joinPage.classList.add("hidden");
     gamePage.classList.remove("hidden");
     document.getElementById("game-id-span").textContent = gameId;
+    document.getElementsByClassName("player").forEach((element) => {
+      element.classList.add("hidden");
+    });
+    document
+      .getElementsByClassName(`player-${maxPlayers}`)
+      .forEach((element) => {
+        element.classList.remove("hidden");
+      });
+
+    game = createGame(maxPlayers);
+    game.maxPlayers = maxPlayers;
+    game.seat = seat;
   });
 
   createGameForm.addEventListener(
@@ -105,7 +120,6 @@ const onLoad = () => {
   socket.on(
     "game:play:start",
     ({ declared, hands: handCounts, maxPlayers, names, turn }, hand, seat) => {
-      game = createGame(maxPlayers);
       setSeat(seat);
       setHand(hand);
       declared.forEach(addDeclared);
@@ -116,9 +130,6 @@ const onLoad = () => {
       drawPlayers();
     }
   );
-
-
 };
-
 
 document.addEventListener("DOMContentLoaded", onLoad, false);
