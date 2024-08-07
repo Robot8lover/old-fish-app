@@ -25,24 +25,22 @@ const onLoad = () => {
     turn: -1,
   });
 
-  const escapeHtml = ((() => {
+  const escapeHtml = (() => {
     const MAP = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;',
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;",
     };
 
-    return ((text) => {
-      return text.replace(
-        /[&<>"']/g,
-        (m) => MAP[m]
-      );
-    });
-  })());
+    return (text) => {
+      return text.replace(/[&<>"']/g, (m) => MAP[m]);
+    };
+  })();
 
-  const convertSeatPos = (pos) => (pos + game.maxPlayers - game.seat) % game.maxPlayers;
+  const convertSeatPos = (pos) =>
+    (pos + game.maxPlayers - game.seat) % game.maxPlayers;
   const unconvertSeatPos = (pos) => (pos + game.seat) % game.maxPlayers;
 
   const drawPlayers = () => {};
@@ -141,7 +139,6 @@ const onLoad = () => {
   const setHand = (hand) => {
     game.hand = hand;
   };
-
 
   const drawHands = () => {};
   const drawSelfHand = () => {};

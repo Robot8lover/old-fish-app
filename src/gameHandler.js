@@ -137,7 +137,7 @@ const registerPlayHandlers = (io, socket) => {
       emitToGame(gameId, "game:play:declare fail", declaration, seat);
     }
 
-    if (game.hands.every((hand) => (hand.size === 0))) {
+    if (game.hands.every((hand) => hand.size === 0)) {
       game.playing = false;
       emitToGame(gameId, "game:play:end"); // let them compute result i guess?
     }
@@ -225,7 +225,7 @@ const registerPlayHandlers = (io, socket) => {
 
   // not strictly a play though...
   socket.on("game:play:change name", (gameId, name) => {
-    if ((typeof name) !== "string") {
+    if (typeof name !== "string") {
       // name is not a string
       return;
     }
