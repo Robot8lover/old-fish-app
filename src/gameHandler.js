@@ -30,6 +30,7 @@ const resetGame = (gameId) => {
 const createGame = (gameId, maxPlayers) => ({
   id: gameId,
   players: new Array(maxPlayers).fill(""),
+  names: new Array(maxPlayers).fill(""),
   turn: -1,
   maxPlayers,
   hands: new Array(maxPlayers),
@@ -50,7 +51,7 @@ const registerPlayHandlers = (io, socket) => {
   const userId = socket.id;
 
   const emitToGame = (gameId, eventName, ...args) => {
-    socket.to(gameId2room(gameId)).emit(eventName, eventName, ...args)
+    io.to(gameId2room(gameId)).emit(eventName, ...args)
   }
 
   socket.on("game:play:ask", (gameId, card, target) => {
@@ -256,7 +257,7 @@ const registerGameHandlers = (io, socket) => {
     game.players[game.players.indexOf("")] = userId;
     user.gameId = gameId;
 
-    socket.emit("game:join", gameId);
+    socket.emit("game:join", gameId, game.maxPlayers, game.players.indexOf(userId));
   };
 
   socket.on("game:create", (maxPlayers) => {
