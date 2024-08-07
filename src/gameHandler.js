@@ -1,6 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { validateCard } from "./cards.js";
-import ASK_DELAY from "../public/shared_js/ASK_DELAY.js";
+import { ASK_DELAY, NAME_LEN } from "../public/shared_js/constants.js";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
 
@@ -222,6 +222,35 @@ const registerPlayHandlers = (io, socket) => {
       );
     });
   });
+
+  // not strictly a play though...
+  socket.on("game:play:change name", (gameId, name) => {
+    if ((typeof name) !== "string") {
+      // name is not a string
+      return;
+    }
+
+    if (name.length > NAME_LEN) {
+      // name too long
+      return;
+    }
+
+    const game = games[gameId];
+    if (!game) {
+      // game does not exist
+      return;
+    }
+
+    const seat = game.players.indexOf(userId);
+    if (seat === -1) {
+      // player is not in game
+      return;
+    }
+
+    game.names[seat] = name;
+
+    emitToGame(gameId, "game:play:change name", seat, name);
+  });
 };
 
 const registerGameHandlers = (io, socket) => {
@@ -250,7 +279,9 @@ const registerGameHandlers = (io, socket) => {
     if (user.gameId) {
       socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
-      prevGame.players[prevGame.players.indexOf(userId)] = "";
+      const seat = prevGame.players.indexOf(userId);
+      prevGame.players[seat] = "";
+      prevGame.names[seat] = "";
 
       if (prevGame.players.every((v) => v === "")) {
         // no players left
