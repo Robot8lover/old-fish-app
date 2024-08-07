@@ -104,20 +104,12 @@ const onLoad = () => {
     false
   );
 
-  const setSeat = (seat) => {
-    game.seat = seat;
-  };
-
   const addDeclared = (halfSuit) => {
     game.declared.push(halfSuit);
   };
 
   const setHandCount = (count, position) => {
     game.handCounts[position] = count;
-  };
-
-  const setName = (name, position) => {
-    game.names[position] = name;
   };
 
   const setTurn = (turn) => {
@@ -132,12 +124,12 @@ const onLoad = () => {
 
   socket.on(
     "game:play:start",
-    ({ declared, hands: handCounts, maxPlayers, names, turn }, hand, seat) => {
-      setSeat(seat);
+    ({ declared, hands: handCounts, turn }, hand) => {
       setHand(hand);
-      declared.forEach(addDeclared);
+      if (declared) {
+        declared.forEach(addDeclared);
+      }
       handCounts.forEach(setHandCount);
-      names.forEach(setName);
       setTurn(turn);
 
       drawPlayers();

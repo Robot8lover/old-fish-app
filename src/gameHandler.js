@@ -13,7 +13,7 @@ const swapSeats = (gameId, seat1, seat2) => {
 };
 
 const gameId2room = (gameId) => `game:${gameId}`;
-const userId2room = (userId) => `user:${userId}`
+const userId2room = (userId) => `user:${userId}`;
 
 const resetGame = (gameId) => {
   const game = games[gameId];
@@ -24,7 +24,7 @@ const resetGame = (gameId) => {
     nextAskTime: 0,
     playing: false,
     declared: [],
-  }
+  };
 };
 
 const createGame = (gameId, maxPlayers) => ({
@@ -51,8 +51,8 @@ const registerPlayHandlers = (io, socket) => {
   const userId = socket.id;
 
   const emitToGame = (gameId, eventName, ...args) => {
-    io.to(gameId2room(gameId)).emit(eventName, ...args)
-  }
+    io.to(gameId2room(gameId)).emit(eventName, ...args);
+  };
 
   socket.on("game:play:ask", (gameId, card, target) => {
     if (game.nextAskTime > Date.now()) {
@@ -99,11 +99,11 @@ const registerPlayHandlers = (io, socket) => {
       // successful ask
       game.hands[target].delete(card);
       game.hands[seat].add(card);
-      emitToGame(gameId, "game:play:ask success", card, seat, target)
+      emitToGame(gameId, "game:play:ask success", card, seat, target);
     } else {
       // target player does not have card
       // unsuccessful ask
-      emitToGame(gameId, "game:play:ask fail", card, seat, target)
+      emitToGame(gameId, "game:play:ask fail", card, seat, target);
       emitToGame(gameId, "game:play:transfer", seat, target);
       game.turn = target;
     }
@@ -197,16 +197,26 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    if (game.players.any((v) => (v === ""))) {
+    if (game.players.any((v) => v === "")) {
       // game is not filled
       return;
     }
 
     game.playing = true;
     game.players.forEach((playerId, i) => {
-      socket.emit(userId2room(playerId), "game:play:start", {}, hand, i);
+      socket.emit(
+        userId2room(playerId),
+        "game:play:start",
+        {
+          declared: game.declared,
+          hands: hands.map((hand) => hand.size),
+          turn: game.turn,
+        },
+        hand,
+        i
+      );
     });
-  })
+  });
 };
 
 const registerGameHandlers = (io, socket) => {
@@ -231,7 +241,7 @@ const registerGameHandlers = (io, socket) => {
   }
   */
 
-  const leaveGame = (assignHost=false) => {
+  const leaveGame = (assignHost = false) => {
     if (user.gameId) {
       socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
@@ -242,7 +252,7 @@ const registerGameHandlers = (io, socket) => {
         delete games[user.gameId];
       } else if (assignHost && prevGame.host === userId) {
         // assign new host if player was host
-        prevGame.host = prevGame.players.find((element) => (element !== ""));
+        prevGame.host = prevGame.players.find((element) => element !== "");
       }
 
       user.gameId = "";
@@ -257,7 +267,12 @@ const registerGameHandlers = (io, socket) => {
     game.players[game.players.indexOf("")] = userId;
     user.gameId = gameId;
 
-    socket.emit("game:join", gameId, game.maxPlayers, game.players.indexOf(userId));
+    socket.emit(
+      "game:join",
+      gameId,
+      game.maxPlayers,
+      game.players.indexOf(userId)
+    );
   };
 
   socket.on("game:create", (maxPlayers) => {
