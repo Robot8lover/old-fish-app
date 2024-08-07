@@ -8,6 +8,7 @@ const onLoad = () => {
   const gameIdInput = document.getElementById("game-id-in");
   const createGameForm = document.getElementById("create-form");
   const joinGameForm = document.getElementById("join-form");
+  const hostBar = document.getElementById("host-bar");
 
   const socket = io();
 
@@ -48,6 +49,7 @@ const onLoad = () => {
       }
 
       socket.emit("game:create", maxPlayers);
+      hostBar.classList.remove("hidden");
     },
     false
   );
@@ -58,6 +60,7 @@ const onLoad = () => {
       event.preventDefault();
 
       socket.emit("game:join", gameIdInput.value);
+      hostBar.classList.add("hidden");
     },
     false
   );
