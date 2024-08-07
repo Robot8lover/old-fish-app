@@ -8,7 +8,6 @@ const onLoad = () => {
   const gameIdInput = document.getElementById("game-id-in");
   const createGameForm = document.getElementById("create-form");
   const joinGameForm = document.getElementById("join-form");
-  const hostBar = document.getElementById("host-bar");
 
   const socket = io();
 
@@ -24,20 +23,24 @@ const onLoad = () => {
     turn: -1,
   });
 
-  convertSeatPos = (pos) => (pos + maxPlayers - seat) % maxPlayers;
+  const convertSeatPos = (pos) => (pos + maxPlayers - seat) % maxPlayers;
 
   socket.on("game:join", (gameId, maxPlayers, seat) => {
     joinPage.classList.add("hidden");
     gamePage.classList.remove("hidden");
     document.getElementById("game-id-span").textContent = gameId;
-    document.getElementsByClassName("player").forEach((element) => {
-      element.classList.add("hidden");
-    });
-    document
-      .getElementsByClassName(`player-${maxPlayers}`)
-      .forEach((element) => {
+    Array.prototype.forEach.call(
+      document.getElementsByClassName("player"),
+      (element) => {
+        element.classList.add("hidden");
+      }
+    );
+    Array.prototype.forEach.call(
+      document.getElementsByClassName(`player-${maxPlayers}`),
+      (element) => {
         element.classList.remove("hidden");
-      });
+      }
+    );
 
     game = createGame(maxPlayers);
     game.maxPlayers = maxPlayers;
@@ -64,7 +67,12 @@ const onLoad = () => {
       }
 
       socket.emit("game:create", maxPlayers);
-      hostBar.classList.remove("hidden");
+      Array.prototype.forEach.call(
+        document.getElementsByClassName("host"),
+        (element) => {
+          element.classList.remove("hidden");
+        }
+      );
     },
     false
   );
@@ -75,7 +83,12 @@ const onLoad = () => {
       event.preventDefault();
 
       socket.emit("game:join", gameIdInput.value);
-      hostBar.classList.add("hidden");
+      Array.prototype.forEach.call(
+        document.getElementsByClassName("host"),
+        (element) => {
+          element.classList.add("hidden");
+        }
+      );
     },
     false
   );

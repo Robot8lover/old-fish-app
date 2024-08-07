@@ -21,14 +21,14 @@ a {
   justify-content: space-around;
 }
 
-#leave-btn {
+#game-banner-left {
   position: absolute;
-  left: 0rem;
+  left: 1rem;
 }
 
-#game-id-div {
+#game-banner-right {
   position: absolute;
-  right: 0rem;
+  right: 1rem;
 }
 
 #game-body {

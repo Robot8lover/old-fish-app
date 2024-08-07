@@ -42,13 +42,14 @@
     </div>
 
     <div id="game-page" div="page-container" class="hidden">
-      <div class="banner">
-        <button type="button" id="leave-btn">Leave game</button>
-        <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
-      </div>
-
-      <div id="host-bar" class="hidden">
-        <button type="button">Start</button>
+      <div class="game-banner">
+        <div id="game-banner-left">
+          <button type="button" id="leave-btn">Leave game</button>
+          <button type="button" id="start-btn" class="host">Start</button>
+        </div>
+        <div id="game-banner-right">
+          <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
+        </div>
       </div>
 
       <div class="game-body">
