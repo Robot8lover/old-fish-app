@@ -30,3 +30,34 @@ a {
   position: absolute;
   right: 0rem;
 }
+
+#game-body {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+#game-body > div {
+  flex: 1;
+}
+
+#game-left {
+  /*
+    - is empty
+    p is player in 6 or 8
+    s is self (player)
+    d is part of display area
+    6 is player in 6
+    8 is player in 8
+
+    ---p---
+    8-----8
+    --ddd--
+    6-ddd-6
+    --ddd--
+    8-----8
+    ---s---
+  */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+}
