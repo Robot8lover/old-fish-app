@@ -7,4 +7,6 @@ const validateCard = (card, maxPlayers) => {
   return DECKS[maxPlayers].has(card);
 };
 
-export { validateCard };
+const validateMaxPlayers = (maxPlayers) => maxPlayers in DECKS;
+
+export { validateCard, validateMaxPlayers };
