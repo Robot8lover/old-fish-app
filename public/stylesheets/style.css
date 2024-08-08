@@ -70,6 +70,7 @@ a {
   --grid-dim: 7;
   --grid-half-dim: calc((var(--grid-dim) + 1) / 2);
   --grid-half-half: calc((var(--grid-half-dim) + 1) / 2);
+  --grid-neg-half-half: calc(var(--grid-dim) - var(--grid-half-half));
 
   display: grid;
   grid-template-columns: repeat(var(--grid-dim), 1fr);
@@ -84,6 +85,26 @@ a {
     ".  .  ss ss aa .  . ";
 
   width: 100%;
+}
+
+.player {
+  background-color: turquoise;
+  border-radius: 10px;
+  border: 3px solid lightseagreen;
+  width: 10rem;
+  height: 3rem;
+  text-align: center;
+}
+
+.player-name {
+  display: inline-block;
+  background-color:lightgreen;
+  border-radius: 5px;
+  border: 1px solid lightseagreen;
+  width: 8rem;
+  height: 1rem;
+  text-align: center;
+  overflow: hidden;
 }
 
 #player-self {
