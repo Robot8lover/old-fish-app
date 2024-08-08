@@ -150,6 +150,7 @@ const onLoad = () => {
     game.hand = hand;
   };
 
+  const drawDeclared = () => {};
   const drawHands = () => {};
   const drawSelfHand = () => {};
   const drawTurn = () => {};
@@ -195,7 +196,7 @@ const onLoad = () => {
     // FIXME: Possibly still add support for whitespace stuff.
   });
 
-  selfName.maxlength = NAME_LEN;
+  selfName.maxLength = NAME_LEN;
   selfName.addEventListener(
     "change",
     () => {
