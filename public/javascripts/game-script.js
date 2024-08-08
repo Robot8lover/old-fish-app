@@ -34,12 +34,17 @@ const onLoad = () => {
   const resetGame = () => {
     const oldGame = game;
     game = createGame(oldGame.maxPlayers);
-    game.gameId = oldGame.maxPlayers;
+    game.gameId = oldGame.gameId;
     game.seat = oldGame.seat;
 
     declareArea.innerHTML = "";
     playArea.innerHTML = "";
-    actionArea.children.forEach((child) => child.classList.add("hidden"));
+    Array.prototype.forEach.call(actionArea.children, (child) => {
+      child.classList.add("hidden");
+    });
+    document.querySelectorAll(".player-turn").forEach((element) => {
+      element.classList.add("hidden");
+    });
 
     if (host) {
       startBtn.classList.remove("hidden");
@@ -72,6 +77,69 @@ const onLoad = () => {
     };
   })();
 
+  // should not be necessary once we use pictures and such
+  const CARD_BACK = "🂠";
+  const CARD_MAP = [
+    "🂢",
+    "🂣",
+    "🂤",
+    "🂥",
+    "🂦",
+    "🂧",
+    "🂨",
+    "🂩",
+    "🂪",
+    "🂫",
+    "🂬",
+    "🂭",
+    "🂡",
+    "🂲",
+    "🂳",
+    "🂴",
+    "🂵",
+    "🂶",
+    "🂷",
+    "🂸",
+    "🂹",
+    "🂺",
+    "🂻",
+    "🂼",
+    "🂽",
+    "🂱",
+    "🃂",
+    "🃃",
+    "🃄",
+    "🃅",
+    "🃆",
+    "🃇",
+    "🃈",
+    "🃉",
+    "🃊",
+    "🃋",
+    "🃌",
+    "🃍",
+    "🃁",
+    "🃒",
+    "🃓",
+    "🃔",
+    "🃕",
+    "🃖",
+    "🃗",
+    "🃘",
+    "🃙",
+    "🃚",
+    "🃛",
+    "🃜",
+    "🃝",
+    "🃑",
+    "🂡",
+    "🂱",
+    "🃁",
+    "🃑",
+    "🃟",
+    "🃏",
+  ];
+
   const convertSeatPos = (pos) =>
     (pos + game.maxPlayers - game.seat) % game.maxPlayers;
   const unconvertSeatPos = (pos) => (pos + game.seat) % game.maxPlayers;
@@ -88,15 +156,17 @@ const onLoad = () => {
         element.classList.add("hidden");
       }
     );
-    (players = document.getElementsByClassName(`player-${maxPlayers}`)),
-      Array.prototype.forEach.call(players, (element) => {
-        element.classList.remove("hidden");
-      });
+    players = document.getElementsByClassName(`player-${maxPlayers}`);
+    Array.prototype.forEach.call(players, (element) => {
+      element.classList.remove("hidden");
+    });
 
     game = createGame(maxPlayers);
     game.gameId = gameId;
     game.maxPlayers = maxPlayers;
     game.seat = seat;
+
+    resetAll();
 
     drawPlayers();
 
@@ -179,14 +249,45 @@ const onLoad = () => {
   };
 
   const drawDeclared = () => {};
-  const drawHands = () => {};
-  const drawSelfHand = () => {};
-  const drawTurn = () => {};
+  const drawHands = () => {
+    game.handCounts.forEach((count, seat) => {
+      const index = convertSeatPos(seat);
+      if (index === 0) {
+        // self
+        return;
+      }
+
+      // FIXME: Make this better, use card backs.
+      players[index].querySelector(".player-cards").innerHTML = `${"".padStart(
+        count * CARD_BACK.length,
+        CARD_BACK
+      )}`;
+    });
+  };
+  const drawSelfHand = () => {
+    // FIXME: Make this better, use card faces.
+    players[0].querySelector(".player-cards").innerHTML = Array.from(game.hand)
+      .map((card) => CARD_MAP[card])
+      .join("");
+  };
+  const drawTurn = () => {
+    const turn = convertSeatPos(game.turn);
+    Array.prototype.forEach.call(players, (player, index) => {
+      const turnElement = player.querySelector(".player-turn");
+      if (index === turn) {
+        turnElement.classList.remove("hidden");
+      } else {
+        turnElement.classList.add("hidden");
+      }
+    });
+  };
 
   socket.on(
     "game:play:start",
-    ({ declared, hands: handCounts, turn }, hand) => {
+    ({ declared, hands: handCounts, turn }, handArr) => {
       startBtn.classList.add("hidden");
+
+      const hand = new Set(handArr);
 
       setHand(hand);
       if (declared) {
@@ -217,25 +318,20 @@ const onLoad = () => {
       // self name so do not make an update
       return;
     }
-    players[convertSeatPos(seat)].getElementsByClassName(
-      "player-name"
-    )[0].textContent = name; // This should be escaped I think.
+    players[convertSeatPos(seat)].querySelector(".player-name").textContent =
+      name; // This should be escaped I think.
   });
 
   const changeMyName = () => {
-      socket.emit("game:change name", game.gameId, selfName.value);
-  }
+    socket.emit("game:change name", game.gameId, selfName.value);
+  };
   selfName.maxLength = NAME_LEN;
-  selfName.addEventListener(
-    "change",
-    changeMyName(),
-    false
-  );
+  selfName.addEventListener("change", changeMyName, false);
 
   //*
   // for debugging
   socket.onAny((event, ...args) => {
-    console.log(`Event "${event}"`, args);
+    console.log(`Event: "${event}"`, args);
   });
   //*/
 };

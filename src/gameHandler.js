@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { validateCard, validateMaxPlayers } from "./cards.js";
+import { validateCard, validateMaxPlayers, makeHands } from "./cards.js";
 import { ASK_DELAY, NAME_LEN } from "../public/shared_js/constants.js";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
@@ -185,7 +185,6 @@ const registerPlayHandlers = (io, socket) => {
   });
 
   socket.on("game:play:start", (gameId) => {
-    console.log("start attempt");
     const game = games[gameId];
     if (!game) {
       // game does not exist
@@ -208,9 +207,12 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    console.log("starting");
-
     game.playing = true;
+
+    game.declared = [];
+    game.hands = makeHands(game.maxPlayers);
+    game.turn = Math.floor(Math.random() * game.maxPlayers);
+
     game.players.forEach((playerId, i) => {
       io.to(userId2room(playerId)).emit(
         "game:play:start",
@@ -219,7 +221,7 @@ const registerPlayHandlers = (io, socket) => {
           hands: game.hands.map((hand) => hand.size),
           turn: game.turn,
         },
-        game.hands[i],
+        Array.from(game.hands[i]),
         i
       );
     });
@@ -348,7 +350,7 @@ const registerGameHandlers = (io, socket) => {
 
     game.names[seat] = name;
 
-    socket.to(gameId2room(gameId)).emit("game:play:change name", seat, name);
+    socket.to(gameId2room(gameId)).emit("game:change name", seat, name);
   });
 
   socket.on("game:leave", () => {
