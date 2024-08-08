@@ -224,35 +224,6 @@ const registerPlayHandlers = (io, socket) => {
       );
     });
   });
-
-  // not strictly a play though...
-  socket.on("game:play:change name", (gameId, name) => {
-    if (typeof name !== "string") {
-      // name is not a string
-      return;
-    }
-
-    if (name.length > NAME_LEN) {
-      // name too long
-      return;
-    }
-
-    const game = games[gameId];
-    if (!game) {
-      // game does not exist
-      return;
-    }
-
-    const seat = game.players.indexOf(userId);
-    if (seat === -1) {
-      // player is not in game
-      return;
-    }
-
-    game.names[seat] = name;
-
-    socket.to(gameId2room(gameId)).emit("game:play:change name", seat, name);
-  });
 };
 
 const registerGameHandlers = (io, socket) => {
@@ -301,7 +272,8 @@ const registerGameHandlers = (io, socket) => {
     leaveGame();
 
     const game = games[gameId];
-    socket.join(gameId2room(gameId));
+    const roomName = gameId2room(gameId);
+    socket.join(roomName);
     game.players[game.players.indexOf("")] = userId;
     user.gameId = gameId;
 
@@ -311,6 +283,10 @@ const registerGameHandlers = (io, socket) => {
       game.maxPlayers,
       game.players.indexOf(userId)
     );
+
+    game.names.forEach((name, seat) => {
+      io.to(userId2room(userId)).emit("game:change name", seat, name);
+    });
   };
 
   socket.on("game:create", (maxPlayers) => {
@@ -337,9 +313,42 @@ const registerGameHandlers = (io, socket) => {
   socket.on("game:join", (gameId) => {
     gameId = gameId.toLowerCase();
     const game = games[gameId];
-    if (game && game.players.includes("") && !game.players.includes(userId)) {
-      joinGame(gameId);
+    if (!game || !game.players.includes("") || game.players.includes(userId)) {
+      // game does not exist
+      // or game is full
+      // or game already has player
+      return;
     }
+
+    joinGame(gameId);
+  });
+
+  socket.on("game:change name", (gameId, name) => {
+    if (typeof name !== "string") {
+      // name is not a string
+      return;
+    }
+
+    if (name.length > NAME_LEN) {
+      // name too long
+      return;
+    }
+
+    const game = games[gameId];
+    if (!game) {
+      // game does not exist
+      return;
+    }
+
+    const seat = game.players.indexOf(userId);
+    if (seat === -1) {
+      // player is not in game
+      return;
+    }
+
+    game.names[seat] = name;
+
+    socket.to(gameId2room(gameId)).emit("game:play:change name", seat, name);
   });
 
   socket.on("game:leave", () => {
@@ -358,7 +367,7 @@ export default (io, socket) => {
   registerGameHandlers(io, socket);
   registerPlayHandlers(io, socket);
 
-  /*
+  //*
   // for debugging
   socket.onAny((event, ...args) => {
     console.log(`Event: "${event}"`, args);
