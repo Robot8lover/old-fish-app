@@ -1,5 +1,5 @@
 import { randomBytes } from "node:crypto";
-import { validateCard } from "./cards.js";
+import { validateCard, validateMaxPlayers } from "./cards.js";
 import { ASK_DELAY, NAME_LEN } from "../public/shared_js/constants.js";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
@@ -312,6 +312,11 @@ const registerGameHandlers = (io, socket) => {
   };
 
   socket.on("game:create", (maxPlayers) => {
+    if (!validateMaxPlayers(maxPlayers)) {
+      // invalid number of players
+      return;
+    }
+
     try {
       let gameId;
       do {
