@@ -185,6 +185,7 @@ const registerPlayHandlers = (io, socket) => {
   });
 
   socket.on("game:play:start", (gameId) => {
+    console.log("start attempt");
     const game = games[gameId];
     if (!game) {
       // game does not exist
@@ -207,17 +208,18 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
+    console.log("starting");
+
     game.playing = true;
     game.players.forEach((playerId, i) => {
-      socket.emit(
-        userId2room(playerId),
+      io.to(userId2room(playerId)).emit(
         "game:play:start",
         {
           declared: game.declared,
-          hands: hands.map((hand) => hand.size),
+          hands: game.hands.map((hand) => hand.size),
           turn: game.turn,
         },
-        hand,
+        game.hands[i],
         i
       );
     });
@@ -333,6 +335,7 @@ const registerGameHandlers = (io, socket) => {
   });
 
   socket.on("game:join", (gameId) => {
+    gameId = gameId.toLowerCase();
     const game = games[gameId];
     if (game && game.players.includes("") && !game.players.includes(userId)) {
       joinGame(gameId);
