@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -7,11 +6,16 @@ a {
   color: #00b7ff;
 }
 
+* {
+  font-size: 1vw;
+}
+
 .hidden {
   display: none !important;
 }
 
 .page-container {
+  padding-top: 2vh;
   width: 100%;
 }
 
@@ -22,12 +26,12 @@ a {
 }
 
 #game-banner {
-  height: 3rem;
+  height: 8vh;
   width: 100%;
 }
 
 #game-banner > * {
-  height: 3rem;
+  height: 8vh;
 }
 
 #game-banner-left {
@@ -68,13 +72,12 @@ a {
   */
 
   --grid-dim: 7;
-  --grid-half-dim: calc((var(--grid-dim) + 1) / 2);
-  --grid-half-half: calc((var(--grid-half-dim) + 1) / 2);
-  --grid-neg-half-half: calc(var(--grid-dim) - var(--grid-half-half));
+
+  --name-width: 8em;
 
   display: grid;
-  grid-template-columns: repeat(var(--grid-dim), 1fr);
-  grid-template-rows: repeat(var(--grid-dim), 1fr);
+  grid-template-columns: repeat(var(--grid-dim), calc(var(--name-width) + 2em));
+  grid-template-rows: repeat(var(--grid-dim), 5lh);
   grid-template-areas:
     ".  .  .  p5 .  .  . "
     "p4 .  .  .  .  .  p6"
@@ -83,59 +86,59 @@ a {
     ".  .  dd dd dd .  . "
     "p2 .  .  .  .  .  p8"
     ".  .  ss ss aa .  . ";
-
-  width: 100%;
 }
 
 .player {
   background-color: turquoise;
   border-radius: 10px;
   border: 3px solid lightseagreen;
-  width: 10rem;
-  height: 3rem;
+  /* width: 10em; */
+  /* height: 3lh; */
   text-align: center;
+  display: inline;
 }
 
 .player-name {
   display: inline-block;
-  background-color:lightgreen;
+  height: 1lh;
+  width: var(--name-width);
+  background-color: lightgreen;
   border-radius: 5px;
   border: 1px solid lightseagreen;
-  width: 8rem;
-  height: 1rem;
   text-align: center;
-  overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: 0px;
 }
 
 #player-self {
   grid-area: ss;
 }
 
-.player-8:nth-of-type(2) {
+#player-p2 {
   grid-area: p2;
 }
 
-.player-8:nth-of-type(3) {
+#player-p3 {
   grid-area: p3;
 }
 
-.player-8:nth-of-type(4) {
+#player-p4 {
   grid-area: p4;
 }
 
-.player-8:nth-of-type(5) {
+#player-p5 {
   grid-area: p5;
 }
 
-.player-8:nth-of-type(6) {
+#player-p6 {
   grid-area: p6;
 }
 
-.player-8:nth-of-type(7) {
+#player-p7 {
   grid-area: p7;
 }
 
-.player-8:nth-of-type(8) {
+#player-p8 {
   grid-area: p8;
 }
 
