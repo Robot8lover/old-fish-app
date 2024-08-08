@@ -46,10 +46,12 @@ a {
 
 #game-body {
   display: flex;
+  gap: 1vw;
   flex-flow: row wrap;
 }
 
 #game-body > div {
+  background-color: green;
   flex: 1;
 }
 
@@ -88,14 +90,15 @@ a {
     ".  .  ss ss aa .  . ";
 }
 
-.player {
+.player,
+#play-area,
+#action-area,
+#outer-declare-area {
   background-color: turquoise;
   border-radius: 10px;
   border: 3px solid lightseagreen;
-  /* width: 10em; */
-  /* height: 3lh; */
   text-align: center;
-  display: inline;
+  /* display: inline; */
 }
 
 .player-name {
@@ -148,4 +151,33 @@ a {
 
 #action-area {
   grid-area: aa;
+
+  background-color: turquoise;
+}
+
+#game-right {
+  position: relative;
+}
+
+#outer-declare-area {
+  height: 80%;
+  width: 80%;
+
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+#declare-area {
+  height: 100%;
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: repeat(2, 40%);
+  grid-template-rows: repeat(4, 20%);
+  align-content: center;
+  justify-content: center;
 }
