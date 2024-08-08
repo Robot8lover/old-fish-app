@@ -9,54 +9,55 @@
     <title>Game</title>
   </head>
   <body>
-    <div id="join-page" class="page-container">
-      <form id="create-form">
-        <fieldset>
-          <legend>Number of players</legend>
-          <label for="players-6">
-            <input
-              type="radio"
-              name="max-players"
-              id="players-6"
-              value="6"
-              checked
-            />
-            6
+    <div id="content-container">
+      <div id="join-page" class="page-container">
+        <form id="create-form">
+          <fieldset>
+            <legend>Number of players</legend>
+            <label for="players-6">
+              <input
+                type="radio"
+                name="max-players"
+                id="players-6"
+                value="6"
+                checked
+              />
+              6
+            </label>
+            <label for="players-8">
+              <input type="radio" name="max-players" id="players-8" value="8" />
+              8
+            </label>
+          </fieldset>
+          <br />
+          <button type="submit" id="create-btn">Create a game!</button>
+        </form>
+        <form id="join-form">
+          <label for="game-id-in">
+            Game ID:
+            <input type="text" name="game-id" id="game-id-in" />
           </label>
-          <label for="players-8">
-            <input type="radio" name="max-players" id="players-8" value="8" />
-            8
-          </label>
-        </fieldset>
-        <br />
-        <button type="submit" id="create-btn">Create a game!</button>
-      </form>
-      <form id="join-form">
-        <label for="game-id-in">
-          Game ID:
-          <input type="text" name="game-id" id="game-id-in" />
-        </label>
-        <br />
-        <button type="submit" id="join-btn">Join a game!</button>
-      </form>
-    </div>
-
-    <div id="game-page" class="page-container hidden">
-      <div id="game-banner">
-        <div id="game-banner-left">
-          <button type="button" id="leave-btn">Leave game</button>
-          <button type="button" id="start-btn" class="host">Start</button>
-        </div>
-        <div id="game-banner-right">
-          <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
-        </div>
+          <br />
+          <button type="submit" id="join-btn">Join a game!</button>
+        </form>
       </div>
 
-      <div id="game-body">
-        <div id="game-left">
-          <!-- area for play and display of players and plays -->
+      <div id="game-page" class="page-container hidden">
+        <div id="game-banner">
+          <div id="game-banner-left">
+            <button type="button" id="leave-btn">Leave game</button>
+            <button type="button" id="start-btn" class="host">Start</button>
+          </div>
+          <div id="game-banner-right">
+            <div id="game-id-div">Game ID: <span id="game-id-span"></span></div>
+          </div>
+        </div>
 
-          <!--
+        <div id="game-body">
+          <div id="game-left">
+            <!-- area for play and display of players and plays -->
+
+            <!--
             - is empty
             p is player in 6 or 8
             s is self (player)
@@ -73,74 +74,75 @@
             --sss--
           -->
 
-          <div id="player-self" class="player player-6 player-8">
-            <div class="name-div">
-              <input
-                type="text"
-                name="self-name"
-                id="self-name"
-                class="player-name"
-              />
+            <div id="player-self" class="player player-6 player-8">
+              <div class="name-div">
+                <input
+                  type="text"
+                  name="self-name"
+                  id="self-name"
+                  class="player-name"
+                />
+              </div>
+              <div id="self-cards" class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div id="self-cards" class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p2" class="player player-6 player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p2" class="player player-6 player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p3" class="player player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p3" class="player player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p4" class="player player-6 player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p4" class="player player-6 player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p5" class="player player-6 player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p5" class="player player-6 player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p6" class="player player-6 player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p6" class="player player-6 player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p7" class="player player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p7" class="player player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
-          <div id="player-p8" class="player player-6 player-8">
-            <div class="name-div">
-              <span class="player-name"></span>
+            <div id="player-p8" class="player player-6 player-8">
+              <div class="name-div">
+                <span class="player-name"></span>
+              </div>
+              <div class="player-cards"></div>
+              <div class="player-turn" class="hidden"></div>
             </div>
-            <div class="player-cards"></div>
-            <div class="player-turn" class="hidden"></div>
-          </div>
 
-          <div id="action-area"></div>
-          <div id="play-area"></div>
-        </div>
-        <div id="game-right">
-          <div id="outer-declare-area">
-            <div id="declare-area"></div>
+            <div id="action-area"></div>
+            <div id="play-area"></div>
+          </div>
+          <div id="game-right">
+            <div id="outer-declare-area">
+              <div id="declare-area"></div>
+            </div>
           </div>
         </div>
       </div>
