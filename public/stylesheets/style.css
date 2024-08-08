@@ -7,11 +7,26 @@ a {
 }
 
 * {
-  font-size: 1vw;
+  font-size: 14px;
+  /* font-size: 1vw; */
 }
 
 .hidden {
   display: none !important;
+}
+
+#content-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+
+  height: 100vh;
+  width: 100vw;
+
+  background-color: darkgreen;
 }
 
 .page-container {
@@ -47,12 +62,17 @@ a {
 #game-body {
   display: flex;
   gap: 1vw;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
+  overflow: auto;
+  align-items: stretch; /* not sure if this is necessary */
 }
 
 #game-body > div {
   background-color: green;
-  flex: 1;
+  flex-shrink: 0;
+
+  --grid-dim: 7;
+  --name-width: 8em;
 }
 
 #game-left {
@@ -72,10 +92,6 @@ a {
     p-----p
     --sss--
   */
-
-  --grid-dim: 7;
-
-  --name-width: 8em;
 
   display: grid;
   grid-template-columns: repeat(var(--grid-dim), calc(var(--name-width) + 2em));
@@ -157,6 +173,9 @@ a {
 
 #game-right {
   position: relative;
+
+  height: calc(var(--grid-dim) * 5lh);
+  width: calc(var(--grid-dim) * (var(--name-width) + 2em) / 4);
 }
 
 #outer-declare-area {
