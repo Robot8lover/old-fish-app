@@ -1,0 +1,7 @@
+.player-cards {
+  font-size: 1.5em;
+}
+
+#player-self .player-cards {
+  font-size: 2.5em;
+}
