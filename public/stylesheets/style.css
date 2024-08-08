@@ -74,51 +74,54 @@ a {
   display: grid;
   grid-template-columns: repeat(var(--grid-dim), 1fr);
   grid-template-rows: repeat(var(--grid-dim), 1fr);
+  grid-template-areas:
+    ".  .  .  p5 .  .  . "
+    "p4 .  .  .  .  .  p6"
+    ".  .  dd dd dd .  . "
+    "p3 .  dd dd dd .  p7"
+    ".  .  dd dd dd .  . "
+    "p2 .  .  .  .  .  p8"
+    ".  .  ss ss aa .  . ";
 
   width: 100%;
 }
 
 #player-self {
-  grid-column: var(--grid-half-dim) - 1, span 2;
-  grid-row: -1;
+  grid-area: ss;
 }
 
 .player-8:nth-of-type(2) {
-  grid-column: 1;
-  grid-row: -var(--grid-half-half);
+  grid-area: p2;
 }
 
 .player-8:nth-of-type(3) {
-  grid-column: 1;
-  grid-row: var(--grid-half-dim);
+  grid-area: p3;
 }
 
 .player-8:nth-of-type(4) {
-  grid-column: 1;
-  grid-row: var(--grid-half-half);
+  grid-area: p4;
 }
 
 .player-8:nth-of-type(5) {
-  grid-column: var(--grid-half-dim);
-  grid-row: 1;
+  grid-area: p5;
 }
 
 .player-8:nth-of-type(6) {
-  grid-column: -1;
-  grid-row: var(--grid-half-half);
+  grid-area: p6;
 }
 
 .player-8:nth-of-type(7) {
-  grid-column: -1;
-  grid-row: var(--grid-half-dim);
+  grid-area: p7;
 }
 
 .player-8:nth-of-type(8) {
-  grid-column: -1;
-  grid-row: -var(--grid-half-half);
+  grid-area: p8;
 }
 
 #play-area {
-  grid-column: var(--grid-half-dim) - 1 / span 3;
-  grid-row: var(--grid-half-dim) - 1 / span 3;
+  grid-area: dd;
+}
+
+#action-area {
+  grid-area: aa;
 }
