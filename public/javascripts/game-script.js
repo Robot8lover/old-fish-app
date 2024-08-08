@@ -11,22 +11,48 @@ const onLoad = () => {
   const playerSelf = document.getElementById("player-self");
   const selfName = document.getElementById("self-name");
   const startBtn = document.getElementById("start-btn");
+  const actionArea = document.getElementById("action-area");
+  const playArea = document.getElementById("play-area");
+  const declareArea = document.getElementById("declare-area");
 
   const socket = io();
 
   const createGame = (maxPlayers) => ({
     gameId: "",
-    maxPlayers: 0,
+    maxPlayers: maxPlayers,
     declared: [],
     handCounts: new Array(maxPlayers).fill(0),
     seat: -1,
-    hand: null,
+    hand: new Set(),
     turn: -1,
   });
 
   let game = createGame(0);
   let host = false;
-  let players = [""];
+  let players = document.getElementsByClassName("player");
+
+  const resetGame = () => {
+    const oldGame = game;
+    game = createGame(oldGame.maxPlayers);
+    game.gameId = oldGame.maxPlayers;
+    game.seat = oldGame.seat;
+
+    declareArea.innerHTML = "";
+    playArea.innerHTML = "";
+    actionArea.children.forEach((child) => child.classList.add("hidden"));
+
+    if (host) {
+      startBtn.classList.remove("hidden");
+    }
+  };
+
+  const resetAll = () => {
+    resetGame();
+
+    document.querySelectorAll("span.player-name").forEach((element) => {
+      element.textContent = "";
+    });
+  };
 
   const escapeHtml = (() => {
     const MAP = {
@@ -73,6 +99,8 @@ const onLoad = () => {
     game.seat = seat;
 
     drawPlayers();
+
+    changeMyName();
   });
 
   createGameForm.addEventListener(
@@ -184,28 +212,27 @@ const onLoad = () => {
     drawResult();
   });
 
-  socket.on("game:play:change name", (seat, name) => {
+  socket.on("game:change name", (seat, name) => {
     if (seat === game.seat) {
       // self name so do not make an update
       return;
     }
     players[convertSeatPos(seat)].getElementsByClassName(
       "player-name"
-    )[0].textContent = escapeHtml(name, true);
-    // FIXME: We do not need to escape if we use escapeHTML.
-    // FIXME: Possibly still add support for whitespace stuff.
+    )[0].textContent = name; // This should be escaped I think.
   });
 
+  const changeMyName = () => {
+      socket.emit("game:change name", game.gameId, selfName.value);
+  }
   selfName.maxLength = NAME_LEN;
   selfName.addEventListener(
     "change",
-    () => {
-      socket.emit("game:play:change name", game.gameId, selfName.value);
-    },
+    changeMyName(),
     false
   );
 
-  /*
+  //*
   // for debugging
   socket.onAny((event, ...args) => {
     console.log(`Event "${event}"`, args);
