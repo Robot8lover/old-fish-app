@@ -180,6 +180,14 @@ a {
   grid-area: dd;
 }
 
+.player.ally {
+  border-color: #4caf50;
+}
+
+.player.opp {
+  border-color: red;
+}
+
 #action-area {
   grid-area: aa;
 

@@ -54,6 +54,14 @@ const onLoad = () => {
   const resetAll = () => {
     resetGame();
 
+    Array.prototype.forEach.call(
+      document.getElementsByClassName("player"),
+      (element) => {
+        element.classList.add("hidden");
+        element.classList.remove("ally", "opp");
+      }
+    );
+
     document.querySelectorAll("span.player-name").forEach((element) => {
       element.textContent = "";
     });
@@ -140,29 +148,25 @@ const onLoad = () => {
     (pos + game.maxPlayers - game.seat) % game.maxPlayers;
   const unconvertSeatPos = (pos) => (pos + game.seat) % game.maxPlayers;
 
-  const drawPlayers = () => {};
+  const drawPlayers = () => {
+    players = document.getElementsByClassName(`player-${game.maxPlayers}`);
+    Array.prototype.forEach.call(players, (element, index) => {
+      element.classList.remove("hidden");
+      element.classList.add(index % 2 === 0 ? "ally" : "opp");
+    });
+  };
 
   socket.on("game:join", (gameId, maxPlayers, seat) => {
     joinPage.classList.add("hidden");
     gamePage.classList.remove("hidden");
     document.getElementById("game-id-span").textContent = gameId;
-    Array.prototype.forEach.call(
-      document.getElementsByClassName("player"),
-      (element) => {
-        element.classList.add("hidden");
-      }
-    );
-    players = document.getElementsByClassName(`player-${maxPlayers}`);
-    Array.prototype.forEach.call(players, (element) => {
-      element.classList.remove("hidden");
-    });
+
+    resetAll();
 
     game = createGame(maxPlayers);
     game.gameId = gameId;
     game.maxPlayers = maxPlayers;
     game.seat = seat;
-
-    resetAll();
 
     drawPlayers();
 
