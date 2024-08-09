@@ -252,9 +252,14 @@ const registerGameHandlers = (io, socket) => {
 
   const leaveGame = (assignHost = false) => {
     if (user.gameId) {
-      socket.leave(gameId2room(user.gameId));
       const prevGame = games[user.gameId];
       const seat = prevGame.players.indexOf(userId);
+
+      socket
+        .to(gameId2room(user.gameId))
+        .emit("game:change name", seat, prevGame.names[seat]);
+      socket.leave(gameId2room(user.gameId));
+
       prevGame.players[seat] = "";
       prevGame.names[seat] = "";
 

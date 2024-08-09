@@ -79,6 +79,8 @@ a {
 
 #game-left {
   /*
+    now old:
+
     - is empty
     p is player in 6 or 8
     s is self (player)
@@ -99,13 +101,13 @@ a {
   grid-template-columns: repeat(var(--grid-dim), calc(var(--name-width) + 2em));
   grid-template-rows: repeat(var(--grid-dim), 5lh);
   grid-template-areas:
-    ".  .  .  p5 .  .  . "
-    "p4 .  .  .  .  .  p6"
+    "p4 .  .  p5 .  .  p6"
+    ".  .  .  .  .  .  . "
     ".  .  dd dd dd .  . "
     "p3 .  dd dd dd .  p7"
     ".  .  dd dd dd .  . "
-    "p2 .  .  .  .  .  p8"
-    ".  .  ss ss aa .  . ";
+    ".  .  .  .  .  .  . "
+    "p2 .  ss ss aa .  p8";
 }
 
 .player,

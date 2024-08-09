@@ -77,63 +77,63 @@ const onLoad = () => {
     };
   })();
 
-  // should not be necessary once we use pictures and such
+  // should not be necessary once we use images and such
   const CARD_BACK = "🂠";
   const CARD_MAP = [
-    "<span class=\"color-black\">🂢</span>",
-    "<span class=\"color-black\">🂣</span>",
-    "<span class=\"color-black\">🂤</span>",
-    "<span class=\"color-black\">🂥</span>",
-    "<span class=\"color-black\">🂦</span>",
-    "<span class=\"color-black\">🂧</span>",
-    "<span class=\"color-black\">🂨</span>",
-    "<span class=\"color-black\">🂩</span>",
-    "<span class=\"color-black\">🂪</span>",
-    "<span class=\"color-black\">🂫</span>",
-    "<span class=\"color-black\">🂬</span>",
-    "<span class=\"color-black\">🂭</span>",
-    "<span class=\"color-red\">🂲</span>",
-    "<span class=\"color-red\">🂳</span>",
-    "<span class=\"color-red\">🂴</span>",
-    "<span class=\"color-red\">🂵</span>",
-    "<span class=\"color-red\">🂶</span>",
-    "<span class=\"color-red\">🂷</span>",
-    "<span class=\"color-red\">🂸</span>",
-    "<span class=\"color-red\">🂹</span>",
-    "<span class=\"color-red\">🂺</span>",
-    "<span class=\"color-red\">🂻</span>",
-    "<span class=\"color-red\">🂼</span>",
-    "<span class=\"color-red\">🂽</span>",
-    "<span class=\"color-red\">🃂</span>",
-    "<span class=\"color-red\">🃃</span>",
-    "<span class=\"color-red\">🃄</span>",
-    "<span class=\"color-red\">🃅</span>",
-    "<span class=\"color-red\">🃆</span>",
-    "<span class=\"color-red\">🃇</span>",
-    "<span class=\"color-red\">🃈</span>",
-    "<span class=\"color-red\">🃉</span>",
-    "<span class=\"color-red\">🃊</span>",
-    "<span class=\"color-red\">🃋</span>",
-    "<span class=\"color-red\">🃌</span>",
-    "<span class=\"color-red\">🃍</span>",
-    "<span class=\"color-black\">🃒</span>",
-    "<span class=\"color-black\">🃓</span>",
-    "<span class=\"color-black\">🃔</span>",
-    "<span class=\"color-black\">🃕</span>",
-    "<span class=\"color-black\">🃖</span>",
-    "<span class=\"color-black\">🃗</span>",
-    "<span class=\"color-black\">🃘</span>",
-    "<span class=\"color-black\">🃙</span>",
-    "<span class=\"color-black\">🃚</span>",
-    "<span class=\"color-black\">🃛</span>",
-    "<span class=\"color-black\">🃜</span>",
-    "<span class=\"color-black\">🃝</span>",
-    "<span class=\"color-black\">🂡</span>",
-    "<span class=\"color-red\">🂱</span>",
-    "<span class=\"color-red\">🃁</span>",
-    "<span class=\"color-black\">🃑</span>",
-    "<span class=\"color-black\">🃟</span>", // not using 🃏 because it does not really match
-    "<span class=\"color-red\">🃟</span>",
+    '<span class="color-black">🂢</span>',
+    '<span class="color-black">🂣</span>',
+    '<span class="color-black">🂤</span>',
+    '<span class="color-black">🂥</span>',
+    '<span class="color-black">🂦</span>',
+    '<span class="color-black">🂧</span>',
+    '<span class="color-black">🂨</span>',
+    '<span class="color-black">🂩</span>',
+    '<span class="color-black">🂪</span>',
+    '<span class="color-black">🂫</span>',
+    '<span class="color-black">🂬</span>',
+    '<span class="color-black">🂭</span>',
+    '<span class="color-red">🂲</span>',
+    '<span class="color-red">🂳</span>',
+    '<span class="color-red">🂴</span>',
+    '<span class="color-red">🂵</span>',
+    '<span class="color-red">🂶</span>',
+    '<span class="color-red">🂷</span>',
+    '<span class="color-red">🂸</span>',
+    '<span class="color-red">🂹</span>',
+    '<span class="color-red">🂺</span>',
+    '<span class="color-red">🂻</span>',
+    '<span class="color-red">🂼</span>',
+    '<span class="color-red">🂽</span>',
+    '<span class="color-red">🃂</span>',
+    '<span class="color-red">🃃</span>',
+    '<span class="color-red">🃄</span>',
+    '<span class="color-red">🃅</span>',
+    '<span class="color-red">🃆</span>',
+    '<span class="color-red">🃇</span>',
+    '<span class="color-red">🃈</span>',
+    '<span class="color-red">🃉</span>',
+    '<span class="color-red">🃊</span>',
+    '<span class="color-red">🃋</span>',
+    '<span class="color-red">🃌</span>',
+    '<span class="color-red">🃍</span>',
+    '<span class="color-black">🃒</span>',
+    '<span class="color-black">🃓</span>',
+    '<span class="color-black">🃔</span>',
+    '<span class="color-black">🃕</span>',
+    '<span class="color-black">🃖</span>',
+    '<span class="color-black">🃗</span>',
+    '<span class="color-black">🃘</span>',
+    '<span class="color-black">🃙</span>',
+    '<span class="color-black">🃚</span>',
+    '<span class="color-black">🃛</span>',
+    '<span class="color-black">🃜</span>',
+    '<span class="color-black">🃝</span>',
+    '<span class="color-black">🂡</span>',
+    '<span class="color-red">🂱</span>',
+    '<span class="color-red">🃁</span>',
+    '<span class="color-black">🃑</span>',
+    '<span class="color-black">🃟</span>', // not using 🃏 because it does not really match
+    '<span class="color-red">🃟</span>',
   ];
 
   const convertSeatPos = (pos) =>
@@ -323,6 +323,26 @@ const onLoad = () => {
   };
   selfName.maxLength = NAME_LEN;
   selfName.addEventListener("change", changeMyName, false);
+
+  socket.on("game:play:ask success", (card, seat, target) => {
+    playArea.innerHTML = `${game.names[seat]} (${convertSeatPos(
+      seat
+    )}) successfully requested ${card} from ${
+      game.names[target]
+    } (${convertSeatPos(target)})`;
+  });
+  socket.on("game:play:ask fail", (card, seat, target) => {
+    playArea.innerHTML = `${game.names[seat]} (${convertSeatPos(
+      seat
+    )}) unsuccessfully requested ${card} from ${
+      game.names[target]
+    } (${convertSeatPos(target)})`;
+  });
+
+  socket.on("game:play:transfer", (seat, target) => {
+    setTurn(target);
+    drawTurn();
+  });
 
   /*
   // for debugging
