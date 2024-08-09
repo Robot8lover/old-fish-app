@@ -9,7 +9,7 @@
 }
 
 .player-cards:not(#player-self .player-cards) {
-  color: darkgreen;
+  color: darkblue;
 }
 
 .color-red {

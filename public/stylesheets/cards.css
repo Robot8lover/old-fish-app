@@ -1,0 +1,222 @@
+.card {
+  background-image: url("../images/playingCards.png");
+  background-repeat: no-repeat;
+  height: 190px;
+  width: 140px;
+}
+
+.card-CT {
+  background-position: -560px -760px;
+}
+
+.card-C2 {
+  background-position: -280px -1140px;
+}
+
+.card-C3 {
+  background-position: -700px -190px;
+}
+
+.card-C4 {
+  background-position: -700px -0px;
+}
+
+.card-C5 {
+  background-position: -560px -1710px;
+}
+
+.card-C6 {
+  background-position: -560px -1520px;
+}
+
+.card-C7 {
+  background-position: -560px -1330px;
+}
+
+.card-C8 {
+  background-position: -560px -1140px;
+}
+
+.card-C9 {
+  background-position: -560px -950px;
+}
+
+.card-CA {
+  background-position: -560px -570px;
+}
+
+.card-CJ {
+  background-position: -560px -380px;
+}
+
+.card-CK {
+  background-position: -560px -190px;
+}
+
+.card-CQ {
+  background-position: -560px -0px;
+}
+
+.card-DT {
+  background-position: -420px -190px;
+}
+
+.card-D2 {
+  background-position: -420px -1710px;
+}
+
+.card-D3 {
+  background-position: -420px -1520px;
+}
+
+.card-D4 {
+  background-position: -420px -1330px;
+}
+
+.card-D5 {
+  background-position: -420px -1140px;
+}
+
+.card-D6 {
+  background-position: -420px -950px;
+}
+
+.card-D7 {
+  background-position: -420px -760px;
+}
+
+.card-D8 {
+  background-position: -420px -570px;
+}
+
+.card-D9 {
+  background-position: -420px -380px;
+}
+
+.card-DA {
+  background-position: -420px -0px;
+}
+
+.card-DJ {
+  background-position: -280px -1710px;
+}
+
+.card-DK {
+  background-position: -280px -1520px;
+}
+
+.card-DQ {
+  background-position: -280px -1330px;
+}
+
+.card-HT {
+  background-position: -140px -1520px;
+}
+
+.card-H2 {
+  background-position: -700px -380px;
+}
+
+.card-H3 {
+  background-position: -280px -950px;
+}
+
+.card-H4 {
+  background-position: -280px -760px;
+}
+
+.card-H5 {
+  background-position: -280px -570px;
+}
+
+.card-H6 {
+  background-position: -280px -380px;
+}
+
+.card-H7 {
+  background-position: -280px -190px;
+}
+
+.card-H8 {
+  background-position: -280px -0px;
+}
+
+.card-H9 {
+  background-position: -140px -1710px;
+}
+
+.card-HA {
+  background-position: -140px -1330px;
+}
+
+.card-HJ {
+  background-position: -140px -1140px;
+}
+
+.card-HK {
+  background-position: -140px -950px;
+}
+
+.card-HQ {
+  background-position: -140px -760px;
+}
+
+.card-RO {
+  background-position: -140px -570px;
+}
+
+.card-ST {
+  background-position: -0px -760px;
+}
+
+.card-S2 {
+  background-position: -140px -380px;
+}
+
+.card-S3 {
+  background-position: -140px -190px;
+}
+
+.card-S4 {
+  background-position: -140px -0px;
+}
+
+.card-S5 {
+  background-position: -0px -1710px;
+}
+
+.card-S6 {
+  background-position: -0px -1520px;
+}
+
+.card-S7 {
+  background-position: -0px -1330px;
+}
+
+.card-S8 {
+  background-position: -0px -1140px;
+}
+
+.card-S9 {
+  background-position: -0px -950px;
+}
+
+.card-SA {
+  background-position: -0px -570px;
+}
+
+.card-SJ {
+  background-position: -0px -380px;
+}
+
+.card-SK {
+  background-position: -0px -190px;
+}
+
+.card-SQ {
+  background-position: -0px -0px;
+}
+
+.card-BO {
+  background-image: url("../images/cardBlackJoker.png");
+}
