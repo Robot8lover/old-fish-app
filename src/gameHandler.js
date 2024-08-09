@@ -369,7 +369,7 @@ export default (io, socket) => {
   registerGameHandlers(io, socket);
   registerPlayHandlers(io, socket);
 
-  //*
+  /*
   // for debugging
   socket.onAny((event, ...args) => {
     console.log(`Event: "${event}"`, args);

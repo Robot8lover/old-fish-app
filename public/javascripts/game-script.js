@@ -328,7 +328,7 @@ const onLoad = () => {
   selfName.maxLength = NAME_LEN;
   selfName.addEventListener("change", changeMyName, false);
 
-  //*
+  /*
   // for debugging
   socket.onAny((event, ...args) => {
     console.log(`Event: "${event}"`, args);

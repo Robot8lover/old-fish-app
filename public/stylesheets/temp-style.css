@@ -5,3 +5,15 @@
 #player-self .player-cards {
   font-size: 2.5em;
 }
+
+.player-cards:not(#player-self .player-cards) {
+  color: darkgreen;
+}
+
+.color-red {
+  color: red;
+}
+
+.color-black {
+  color: black;
+}

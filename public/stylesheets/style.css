@@ -71,6 +71,8 @@ a {
   background-color: green;
   flex-shrink: 0;
 
+  margin: 1em;
+
   --grid-dim: 7;
   --name-width: 8em;
 }
