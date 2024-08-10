@@ -32,14 +32,14 @@ io.on("connection", onConnection);
 
 io.on("error", onSocketError);
 
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(express.static(path.join(path.dirname(__dirname), "public")));
-
-
+app.use(
+  express.static(path.join(path.dirname(__dirname), "public/images/favicons"))
+);
 
 app.set("port", port);
 const server = http.createServer(app);
@@ -47,15 +47,13 @@ const server = http.createServer(app);
 server.listen(port);
 server.on("listening", onListening);
 
-io.attach(server)
+io.attach(server);
 
 /**
  * Event listener for HTTP server "listening" event.
  */
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === "string"
-    ? "pipe " + addr
-    : "port " + addr.port;
+  const addr = server.address();
+  const bind = typeof addr === "string" ? "pipe " + addr : "port " + addr.port;
   debug("Listening on " + bind);
 }
