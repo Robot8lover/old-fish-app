@@ -3,220 +3,233 @@
   background-repeat: no-repeat;
   height: 190px;
   width: 140px;
+  display: inline-block;
 }
 
-.card-CT {
+.card.card-CT {
   background-position: -560px -760px;
 }
 
-.card-C2 {
+.card.card-C2 {
   background-position: -280px -1140px;
 }
 
-.card-C3 {
+.card.card-C3 {
   background-position: -700px -190px;
 }
 
-.card-C4 {
+.card.card-C4 {
   background-position: -700px -0px;
 }
 
-.card-C5 {
+.card.card-C5 {
   background-position: -560px -1710px;
 }
 
-.card-C6 {
+.card.card-C6 {
   background-position: -560px -1520px;
 }
 
-.card-C7 {
+.card.card-C7 {
   background-position: -560px -1330px;
 }
 
-.card-C8 {
+.card.card-C8 {
   background-position: -560px -1140px;
 }
 
-.card-C9 {
+.card.card-C9 {
   background-position: -560px -950px;
 }
 
-.card-CA {
+.card.card-CA {
   background-position: -560px -570px;
 }
 
-.card-CJ {
+.card.card-CJ {
   background-position: -560px -380px;
 }
 
-.card-CK {
+.card.card-CK {
   background-position: -560px -190px;
 }
 
-.card-CQ {
+.card.card-CQ {
   background-position: -560px -0px;
 }
 
-.card-DT {
+.card.card-DT {
   background-position: -420px -190px;
 }
 
-.card-D2 {
+.card.card-D2 {
   background-position: -420px -1710px;
 }
 
-.card-D3 {
+.card.card-D3 {
   background-position: -420px -1520px;
 }
 
-.card-D4 {
+.card.card-D4 {
   background-position: -420px -1330px;
 }
 
-.card-D5 {
+.card.card-D5 {
   background-position: -420px -1140px;
 }
 
-.card-D6 {
+.card.card-D6 {
   background-position: -420px -950px;
 }
 
-.card-D7 {
+.card.card-D7 {
   background-position: -420px -760px;
 }
 
-.card-D8 {
+.card.card-D8 {
   background-position: -420px -570px;
 }
 
-.card-D9 {
+.card.card-D9 {
   background-position: -420px -380px;
 }
 
-.card-DA {
+.card.card-DA {
   background-position: -420px -0px;
 }
 
-.card-DJ {
+.card.card-DJ {
   background-position: -280px -1710px;
 }
 
-.card-DK {
+.card.card-DK {
   background-position: -280px -1520px;
 }
 
-.card-DQ {
+.card.card-DQ {
   background-position: -280px -1330px;
 }
 
-.card-HT {
+.card.card-HT {
   background-position: -140px -1520px;
 }
 
-.card-H2 {
+.card.card-H2 {
   background-position: -700px -380px;
 }
 
-.card-H3 {
+.card.card-H3 {
   background-position: -280px -950px;
 }
 
-.card-H4 {
+.card.card-H4 {
   background-position: -280px -760px;
 }
 
-.card-H5 {
+.card.card-H5 {
   background-position: -280px -570px;
 }
 
-.card-H6 {
+.card.card-H6 {
   background-position: -280px -380px;
 }
 
-.card-H7 {
+.card.card-H7 {
   background-position: -280px -190px;
 }
 
-.card-H8 {
+.card.card-H8 {
   background-position: -280px -0px;
 }
 
-.card-H9 {
+.card.card-H9 {
   background-position: -140px -1710px;
 }
 
-.card-HA {
+.card.card-HA {
   background-position: -140px -1330px;
 }
 
-.card-HJ {
+.card.card-HJ {
   background-position: -140px -1140px;
 }
 
-.card-HK {
+.card.card-HK {
   background-position: -140px -950px;
 }
 
-.card-HQ {
+.card.card-HQ {
   background-position: -140px -760px;
 }
 
-.card-RO {
+.card.card-RO {
   background-position: -140px -570px;
 }
 
-.card-ST {
+.card.card-ST {
   background-position: -0px -760px;
 }
 
-.card-S2 {
+.card.card-S2 {
   background-position: -140px -380px;
 }
 
-.card-S3 {
+.card.card-S3 {
   background-position: -140px -190px;
 }
 
-.card-S4 {
+.card.card-S4 {
   background-position: -140px -0px;
 }
 
-.card-S5 {
+.card.card-S5 {
   background-position: -0px -1710px;
 }
 
-.card-S6 {
+.card.card-S6 {
   background-position: -0px -1520px;
 }
 
-.card-S7 {
+.card.card-S7 {
   background-position: -0px -1330px;
 }
 
-.card-S8 {
+.card.card-S8 {
   background-position: -0px -1140px;
 }
 
-.card-S9 {
+.card.card-S9 {
   background-position: -0px -950px;
 }
 
-.card-SA {
+.card.card-SA {
   background-position: -0px -570px;
 }
 
-.card-SJ {
+.card.card-SJ {
   background-position: -0px -380px;
 }
 
-.card-SK {
+.card.card-SK {
   background-position: -0px -190px;
 }
 
-.card-SQ {
+.card.card-SQ {
   background-position: -0px -0px;
 }
 
-.card-BO {
+.card.card-BO {
   background-image: url("../images/cardBlackJoker.png");
+}
+
+.card.card-back-blue {
+  background-image: url("../images/cardBacks/cardBack_blue5.png")
+}
+
+.card.card-back-green {
+  background-image: url("../images/cardBacks/cardBack_green5.png")
+}
+
+.card.card-back-red {
+  background-image: url("../images/cardBacks/cardBack_red5.png")
 }
