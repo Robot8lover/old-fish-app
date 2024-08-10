@@ -41,7 +41,7 @@ a {
 }
 
 #game-banner {
-  height: 8vh;
+  height: 6vh;
   width: 100%;
 }
 
@@ -61,10 +61,21 @@ a {
 
 #game-body {
   display: flex;
-  gap: 1vw;
+  gap: 2vw;
   flex-flow: row nowrap;
   overflow: auto;
   align-items: stretch; /* not sure if this is necessary */
+
+  --grid-dim: 7;
+  --name-width: 10em;
+  --full-width: calc(var(--name-width) + 2em);
+  --empty-width: 3em;
+  --full-height: 6lh;
+  --empty-height: 2lh;
+  --empty-count: calc(var(--grid-dim) - 5);
+  --total-width: calc(5 * var(--full-width) + var(--empty-count) * var(--empty-width));
+  --total-height: calc(5 * var(--full-height) + var(--empty-count) *
+    var(--empty-height));
 }
 
 #game-body > div {
@@ -72,12 +83,19 @@ a {
   flex-shrink: 0;
 
   margin: 1em;
-
-  --grid-dim: 7;
-  --name-width: 8em;
+  padding: 1em;
+  border-radius: 1.5em;
 }
 
-#game-left {
+div#game-left {
+  margin-right: 0em;
+}
+
+div#game-right {
+  margin-left: 0em;
+}
+
+div#game-left {
   /*
     now old:
 
@@ -98,8 +116,20 @@ a {
   */
 
   display: grid;
-  grid-template-columns: repeat(var(--grid-dim), calc(var(--name-width) + 2em));
-  grid-template-rows: repeat(var(--grid-dim), 5lh);
+  grid-template-columns:
+    var(--full-width) repeat(calc(var(--empty-count) / 2), var(--empty-width))
+    repeat(3, var(--full-width)) repeat(
+      calc(var(--empty-count) / 2),
+      var(--empty-width)
+    )
+    var(--full-width);
+  grid-template-rows:
+    var(--full-height) repeat(calc(var(--empty-count) / 2), var(--empty-height))
+    repeat(3, var(--full-height)) repeat(
+      calc(var(--empty-count) / 2),
+      var(--empty-height)
+    )
+    var(--full-height);
   grid-template-areas:
     "p4 .  .  p5 .  .  p6"
     ".  .  .  .  .  .  . "
@@ -130,20 +160,25 @@ a {
   border-radius: 5px;
   border: 1px solid lightseagreen;
   text-align: center;
-  overflow: clip;
-  overflow-clip-margin: 0px;
+  overflow: hidden;
 }
 
 .player-cards {
-  height: 2lh;
+  height: 3lh;
   width: var(--name-width);
+  padding: 0.1vw;
   border-radius: 10px;
   border: 1px solid white;
   margin-left: auto;
   margin-right: auto;
   justify-content: center;
   display: grid;
-  grid-template-columns: repeat(auto-fit,  minmax(10px, max-content)) ;
+  grid-template-columns: repeat(auto-fit, minmax(10px, max-content));
+  overflow: hidden;
+}
+
+#player-self div.player-cards {
+  width: calc(2 * var(--name-width));
 }
 
 .player-turn {
@@ -209,8 +244,8 @@ a {
 #game-right {
   position: relative;
 
-  height: calc(var(--grid-dim) * 5lh);
-  width: calc(var(--grid-dim) * (var(--name-width) + 2em) / 4);
+  height: var(--total-height);
+  width: calc(var(--total-width) / 4);
 }
 
 #outer-declare-area {
