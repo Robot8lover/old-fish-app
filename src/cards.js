@@ -16,6 +16,17 @@ const validateCard = (card, maxPlayers) => {
   return DECKS[maxPlayers].has(card);
 };
 
+const validateCardRequest = (card, hand) => {
+  if (hand.has(card)) {
+    // Hand has the card (illegal ask).
+    return false;
+  }
+
+  // Check if hand has a card in the half-suit.
+  const base = card - (card % 6);
+  return [0, 1, 2, 3, 4, 5].some((offset) => hand.has(base + offset));
+};
+
 const validateMaxPlayers = (maxPlayers) => maxPlayers in DECKS;
 
 const shuffleArray = (original) => {
@@ -41,4 +52,4 @@ const makeHands = (maxPlayers) => {
   return hands.map((handArr) => new Set(handArr));
 };
 
-export { validateCard, validateMaxPlayers, shuffleArray, makeHands };
+export { validateCard, validateCardRequest, validateMaxPlayers, shuffleArray, makeHands };

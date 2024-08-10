@@ -1,5 +1,10 @@
 import { randomBytes } from "node:crypto";
-import { validateCard, validateMaxPlayers, makeHands } from "./cards.js";
+import {
+  validateCard,
+  validateCardRequest,
+  validateMaxPlayers,
+  makeHands,
+} from "./cards.js";
 import { ASK_DELAY, NAME_LEN } from "../public/shared_js/constants.js";
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
@@ -87,12 +92,10 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    if (game.hands[seat].has(card)) {
-      // player has the card (illegal)
+    if (!validateCardRequest(card, game.hands[seat])) {
+      // player has the card or does not have a card in the half-suit
       return;
     }
-
-    // TODO: add card held in half suit check
 
     if (game.hands[target].has(card)) {
       // target player has card
