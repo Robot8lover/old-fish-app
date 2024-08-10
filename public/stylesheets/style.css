@@ -134,6 +134,18 @@ a {
   overflow-clip-margin: 0px;
 }
 
+.player-cards {
+  height: 2lh;
+  width: var(--name-width);
+  border-radius: 10px;
+  border: 1px solid white;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit,  minmax(10px, max-content)) ;
+}
+
 .player-turn {
   position: absolute;
   right: 0.1em;
