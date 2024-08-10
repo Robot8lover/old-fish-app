@@ -56,6 +56,12 @@ a {
 #game-banner-left {
   position: absolute;
   left: 1rem;
+  display: flex;
+}
+
+#game-banner-left button {
+  padding: 5px 10px;
+  margin: 5px;
 }
 
 #game-banner-right {
@@ -184,7 +190,7 @@ div#game-left {
   overflow: hidden;
 }
 
-#player-self div.player-cards {
+#player-self .player-cards {
   width: calc(2 * var(--name-width));
 }
 

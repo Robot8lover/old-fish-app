@@ -33,6 +33,7 @@
       href="../images/favicons/favicon.ico"
     />
 
+    <link rel="stylesheet" href="stylesheets/form-style.css" />
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="stylesheet" href="stylesheets/cards.css" />
     <script src="/socket.io/socket.io.js"></script>
@@ -45,7 +46,7 @@
         <form id="create-form">
           <fieldset>
             <legend>Number of players</legend>
-            <label for="players-6">
+            <p><label for="players-6">
               <input
                 type="radio"
                 name="max-players"
@@ -54,11 +55,12 @@
                 checked
               />
               6
-            </label>
+            </label></p>
+            <p>
             <label for="players-8">
               <input type="radio" name="max-players" id="players-8" value="8" />
               8
-            </label>
+            </label></p>
           </fieldset>
           <br />
           <button type="submit" id="create-btn">Create a game!</button>
@@ -76,7 +78,7 @@
       <div id="game-page" class="page-container hidden">
         <div id="game-banner">
           <div id="game-banner-left">
-            <button type="button" id="leave-btn">Leave game</button>
+            <button type="button" id="leave-btn">Leave</button>
             <button type="button" id="start-btn" class="host">Start</button>
           </div>
           <div id="game-banner-right">

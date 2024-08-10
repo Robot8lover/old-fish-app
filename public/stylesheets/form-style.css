@@ -1,0 +1,137 @@
+button,
+input,
+select,
+textarea,
+progress,
+meter {
+  font-family: inherit;
+  font-size: 100%;
+  padding: 0px;
+  margin: 0px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+button,
+input:not([type="radio"]):not([type="checkbox"]),
+select,
+textarea,
+progress,
+meter {
+  display: block;
+  height: 30px;
+  margin: 5px 0px;
+}
+
+input:invalid {
+  border: 2px solid red;
+}
+
+input[type="text"] {
+  padding-block: 1px;
+  padding-inline: 2px;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+input[type="color"],
+select {
+  box-shadow: inset 1px 1px 3px #ccc;
+  border-radius: 5px;
+}
+
+/* Unstyle original */
+input[type="checkbox"],
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="checkbox"] {
+  position: relative;
+  width: 1em;
+  height: 1em;
+  border: 1px solid gray;
+  /* Adjusts the position of the checkboxes on the text baseline */
+  vertical-align: -2px;
+  /* Set here so that Windows' High-Contrast Mode can override */
+  color: green;
+}
+
+input[type="checkbox"]::before {
+  content: "✔";
+  position: absolute;
+  font-size: 1.2em;
+  right: -1px;
+  top: -0.3em;
+  visibility: hidden;
+}
+
+input[type="checkbox"]:checked::before {
+  /* Use `visibility` instead of `display` to avoid recalculating layout */
+  visibility: visible;
+}
+
+input[type="checkbox"]:disabled {
+  border-color: black;
+  background: #ddd;
+  color: gray;
+}
+
+input[type="radio"] {
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 0.75em;
+  border: 2px solid gray;
+  /* Adjusts the position of the checkboxes on the text baseline */
+
+  vertical-align: -2px;
+  outline: none;
+}
+
+input[type="radio"]:focus {
+  outline: 1px solid skyblue;
+}
+
+input[type="radio"]::before {
+  display: block;
+  content: " ";
+  width: 0.625em;
+  height: 0.625em;
+  border-radius: 0.375em;
+  background-color: red;
+  font-size: 1.2em;
+  transform: translate(0.1875em, 0.1875em) scale(0);
+  transform-origin: center;
+  transition: all 0.2s ease-in;
+}
+
+input[type="radio"]:checked::before {
+  transform: translate(0.1875em, 0.1875em) scale(1);
+  transition: all 0.2s cubic-bezier(0.25, 0.25, 0.56, 2);
+}
+
+input[type="radio"]:indeterminate {
+  outline: 2px solid red;
+  animation: 0.4s linear infinite alternate outline-pulse;
+}
+
+@keyframes outline-pulse {
+  from {
+    outline: 2px solid red;
+  }
+
+  to {
+    outline: 6px solid red;
+  }
+}
+
+#create-form,
+#join-form {
+  border: 3px dotted #ccc;
+  height: fit-content;
+  padding: 10px;
+}

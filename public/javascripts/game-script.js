@@ -46,6 +46,10 @@ const onLoad = () => {
       element.classList.add("hidden");
     });
 
+    document.querySelectorAll(".player-cards").forEach((element) => {
+      element.innerHTML = "";
+    });
+
     if (host) {
       startBtn.classList.remove("hidden");
     }

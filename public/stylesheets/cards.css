@@ -3,7 +3,8 @@
   background-repeat: no-repeat;
   height: 190px;
   width: 140px;
-  display: inline-block;
+
+  /* height: min(190px, 3lh); */
 }
 
 .card.card-CT {
