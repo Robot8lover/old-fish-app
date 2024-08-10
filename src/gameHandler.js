@@ -218,7 +218,7 @@ const registerPlayHandlers = (io, socket) => {
         "game:play:start",
         {
           declared: game.declared,
-          hands: game.hands.map((hand) => hand.size),
+          handCounts: game.hands.map((hand) => hand.size),
           turn: game.turn,
         },
         Array.from(game.hands[i]),

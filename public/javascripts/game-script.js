@@ -23,7 +23,7 @@ const onLoad = () => {
     declared: [],
     handCounts: new Array(maxPlayers).fill(0),
     seat: -1,
-    hand: new Set(),
+    hand: [],
     turn: -1,
   });
 
@@ -261,7 +261,6 @@ const onLoad = () => {
         return;
       }
 
-      // FIXME: Make this better, use card backs.
       players[index].querySelector(".player-cards").innerHTML = `${"".padStart(
         count * CARD_BACK.length,
         CARD_BACK
@@ -269,8 +268,7 @@ const onLoad = () => {
     });
   };
   const drawSelfHand = () => {
-    // FIXME: Make this better, use card faces.
-    players[0].querySelector(".player-cards").innerHTML = Array.from(game.hand)
+    players[0].querySelector(".player-cards").innerHTML = game.hand
       .map((card) => `<div class="card card-${CARD_MAP[card]}"></div>`)
       .join("");
   };
@@ -288,10 +286,8 @@ const onLoad = () => {
 
   socket.on(
     "game:play:start",
-    ({ declared, hands: handCounts, turn }, handArr) => {
+    ({ declared, handCounts, turn }, hand) => {
       startBtn.classList.add("hidden");
-
-      const hand = new Set(handArr);
 
       setHand(hand);
       if (declared) {
