@@ -129,9 +129,6 @@ input[type="radio"]:indeterminate {
   }
 }
 
-#create-form,
-#join-form {
-  border: 3px dotted #ccc;
-  height: fit-content;
-  padding: 10px;
+button {
+  border-radius: 15px;
 }

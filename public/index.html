@@ -46,21 +46,29 @@
         <form id="create-form">
           <fieldset>
             <legend>Number of players</legend>
-            <p><label for="players-6">
-              <input
-                type="radio"
-                name="max-players"
-                id="players-6"
-                value="6"
-                checked
-              />
-              6
-            </label></p>
             <p>
-            <label for="players-8">
-              <input type="radio" name="max-players" id="players-8" value="8" />
-              8
-            </label></p>
+              <label for="players-6">
+                <input
+                  type="radio"
+                  name="max-players"
+                  id="players-6"
+                  value="6"
+                  checked
+                />
+                6
+              </label>
+            </p>
+            <p>
+              <label for="players-8">
+                <input
+                  type="radio"
+                  name="max-players"
+                  id="players-8"
+                  value="8"
+                />
+                8
+              </label>
+            </p>
           </fieldset>
           <br />
           <button type="submit" id="create-btn">Create a game!</button>
@@ -152,7 +160,17 @@
               <div class="player-turn" class="hidden"></div>
             </div>
 
-            <div id="action-area"></div>
+            <div id="action-area">
+              <button type="button" id="declare-btn" class="action-btn">
+                Declare half-set
+              </button>
+              <button type="button" id="request-btn" class="action-btn">
+                Request card
+              </button>
+              <button type="button" id="transfer-btn" class="action-btn">
+                Transfer turn
+              </button>
+            </div>
 
             <div id="play-area"></div>
           </div>

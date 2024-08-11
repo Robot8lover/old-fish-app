@@ -2,6 +2,12 @@
 
 import { ASK_DELAY, NAME_LEN } from "../shared_js/constants.js";
 
+const Enum = (arr) =>
+  arr.reduce((acc, val) => ({
+    ...acc,
+    [val]: val,
+  }), Object.create(null));
+
 const onLoad = () => {
   const joinPage = document.getElementById("join-page");
   const gamePage = document.getElementById("game-page");
@@ -14,8 +20,15 @@ const onLoad = () => {
   const actionArea = document.getElementById("action-area");
   const playArea = document.getElementById("play-area");
   const declareArea = document.getElementById("declare-area");
+  const declareBtn = document.getElementById("declare-btn");
+  const requestBtn = document.getElementById("request-btn");
+  const transferBtn = document.getElementById("transfer-btn");
 
   const socket = io();
+
+  const MODES = Enum(["NORMAL", 'DECLARE', 'REQUEST', 'TRANSFER']);
+
+  let mode = MODES.NORMAL;
 
   const createGame = (maxPlayers) => ({
     gameId: "",
@@ -39,9 +52,6 @@ const onLoad = () => {
 
     declareArea.innerHTML = "";
     playArea.innerHTML = "";
-    Array.prototype.forEach.call(actionArea.children, (child) => {
-      child.classList.add("hidden");
-    });
     document.querySelectorAll(".player-turn").forEach((element) => {
       element.classList.add("hidden");
     });
@@ -53,6 +63,10 @@ const onLoad = () => {
     if (host) {
       startBtn.classList.remove("hidden");
     }
+
+    declareBtn.classList.add("vis-hidden");
+    requestBtn.classList.add("vis-hidden");
+    transferBtn.classList.add("vis-hidden");
   };
 
   const resetAll = () => {
@@ -63,6 +77,7 @@ const onLoad = () => {
       (element) => {
         element.classList.add("hidden");
         element.classList.remove("ally", "opp");
+        element.onclick = undefined;
       }
     );
 
@@ -71,23 +86,10 @@ const onLoad = () => {
     });
   };
 
-  const escapeHtml = (() => {
-    const MAP = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
+  const onClickPlayer = (index) => {
+    const seat = unconvertSeatPos(index);
 
-    return (text, replaceWhitespace = false) => {
-      if (replaceWhitespace) {
-        return text.replace(/\s/g, " ").replace(/[&<>"']/g, (m) => MAP[m]);
-      } else {
-        return text.replace(/[&<>"']/g, (m) => MAP[m]);
-      }
-    };
-  })();
+  }
 
   const CARD_BACK = '<div class="card card-back-blue"></div>';
 
@@ -284,24 +286,23 @@ const onLoad = () => {
     });
   };
 
-  socket.on(
-    "game:play:start",
-    ({ declared, handCounts, turn }, hand) => {
-      startBtn.classList.add("hidden");
+  socket.on("game:play:start", ({ declared, handCounts, turn }, hand) => {
+    startBtn.classList.add("hidden");
 
-      setHand(hand);
-      if (declared) {
-        declared.forEach(addDeclared);
-        drawDeclared();
-      }
-      handCounts.forEach(setHandCount);
-      setTurn(turn);
+    declareBtn.classList.remove("vis-hidden");
 
-      drawHands();
-      drawSelfHand();
-      drawTurn();
+    setHand(hand);
+    if (declared) {
+      declared.forEach(addDeclared);
+      drawDeclared();
     }
-  );
+    handCounts.forEach(setHandCount);
+    setTurn(turn);
+
+    drawHands();
+    drawSelfHand();
+    drawTurn();
+  });
 
   startBtn.addEventListener("click", () => {
     socket.emit("game:play:start", game.gameId);
