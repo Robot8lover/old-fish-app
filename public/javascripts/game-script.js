@@ -211,6 +211,13 @@ const onLoad = () => {
     return acc.concat(arr.slice(ind, ind + 6));
   }, []);
 
+  const NUM_HALF_SETS = {
+    6: 9,
+    8: 8,
+  };
+
+  const cardStrToDiv = (cardStr) => `<div class="card card-${cardStr}"></div>`;
+
   const convertSeatPos = (pos) =>
     (pos + game.maxPlayers - game.seat) % game.maxPlayers;
   const unconvertSeatPos = (pos) => (pos + game.seat) % game.maxPlayers;
@@ -321,9 +328,15 @@ const onLoad = () => {
     game.hand = hand;
   };
 
-  const drawDeclared = () => {
-    // TODO: implement this
-    for (const halfSet of HALF_SETS) {
+  const drawDeclareArea = () => {
+    declareArea.innerHTML = "";
+    for (const halfSet of HALF_SETS.slice(0, NUM_HALF_SETS[game.maxPlayers])) {
+      const element = document.createElement("div");
+      element.class = "half-set";
+      for (const cardStr of halfSet) {
+        element.innerHTML += cardStrToDiv(cardStr);
+      }
+      declareArea.appendChild(element);
     }
   };
 
@@ -345,7 +358,7 @@ const onLoad = () => {
     // TODO: implement sorting that separates half suits and same color suits
     game.hand.sort();
     players[0].querySelector(".player-cards").innerHTML = game.hand
-      .map((card) => `<div class="card card-${CARD_MAP[card]}"></div>`)
+      .map((card) => cardStrToDiv(CARD_MAP[card]))
       .join("");
   };
   const drawTurn = () => {
@@ -366,9 +379,9 @@ const onLoad = () => {
     declareBtn.classList.remove("vis-hidden");
 
     setHand(hand);
+    drawDeclareArea();
     if (declared) {
       declared.forEach(addDeclared);
-      drawDeclared();
     }
     handCounts.forEach(setHandCount);
     setTurn(turn);

@@ -307,3 +307,9 @@ input.player-name#self-name {
   align-content: center;
   justify-content: center;
 }
+
+.half-set {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+}
