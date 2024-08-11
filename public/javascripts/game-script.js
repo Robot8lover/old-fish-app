@@ -89,10 +89,24 @@ const onLoad = () => {
     });
   };
 
+  const createDeclarer = (halfSet) => ({
+    halfSet,
+    declares: Object.create(null),
+    addCard(card, seat) {
+      if (
+        !(selectedCard in this.declares) &&
+        card - (card % 6) === this.halfSet * 6
+      ) {
+        this.declares[card] = seat;
+      }
+    },
+  });
+
   let selectedCard = -1;
-  let declareObj = {};
+  let declareObj = createDeclarer(0);
 
   const onClickPlayer = (index) => {
+    // function factory
     const seat = unconvertSeatPos(index);
     return (event) => {
       switch (mode) {
@@ -100,14 +114,12 @@ const onLoad = () => {
           break;
         case MODES.DECLARE:
           if (selectedCard !== -1 && index % 2 === 0) {
-            if (!(selectedCard in declareObj)) {
-              declareObj[selectedCard] = seat;
-            }
+            declareObj.addCard(selectedCard, seat);
             selectedCard = -1;
           }
           break;
         case MODES.REQUEST:
-          if (index % 2 === 1) {
+          if (selectedCard !== -1 && index % 2 === 1) {
             socket.emit("game:play:ask", game.gameId, selectedCard, seat);
             selectedCard = -1;
           }
@@ -124,6 +136,12 @@ const onLoad = () => {
       }
       event.stopPropagation();
     };
+  };
+
+  const onClickWindow = (event) => {
+    // actual event listener
+    mode = MODES.NORMAL;
+    selectedCard = -1;
   };
 
   const CARD_BACK = '<div class="card card-back-blue"></div>';
@@ -185,6 +203,14 @@ const onLoad = () => {
     "RO",
   ];
 
+  const HALF_SETS = CARD_MAP.reduce((acc, val, ind, arr) => {
+    if (ind % 6 !== 0) {
+      return acc;
+    }
+
+    return acc.concat(arr.slice(ind, ind + 6));
+  }, []);
+
   const convertSeatPos = (pos) =>
     (pos + game.maxPlayers - game.seat) % game.maxPlayers;
   const unconvertSeatPos = (pos) => (pos + game.seat) % game.maxPlayers;
@@ -214,6 +240,8 @@ const onLoad = () => {
     drawPlayers();
 
     changeMyName();
+
+    window.addEventListener("click", onClickWindow, false);
   });
 
   createGameForm.addEventListener(
@@ -271,12 +299,14 @@ const onLoad = () => {
       joinPage.classList.remove("hidden");
       gamePage.classList.add("hidden");
       document.getElementById("game-id-span").textContent = "";
+
+      window.removeEventListener("click", onClickWindow, false);
     },
     false
   );
 
-  const addDeclared = (halfSuit) => {
-    game.declared.push(halfSuit);
+  const addDeclared = (halfSet) => {
+    game.declared.push(halfSet);
   };
 
   const setHandCount = (count, position) => {
@@ -291,7 +321,12 @@ const onLoad = () => {
     game.hand = hand;
   };
 
-  const drawDeclared = () => {};
+  const drawDeclared = () => {
+    // TODO: implement this
+    for (const halfSet of HALF_SETS) {
+    }
+  };
+
   const drawHands = () => {
     game.handCounts.forEach((count, seat) => {
       const index = convertSeatPos(seat);

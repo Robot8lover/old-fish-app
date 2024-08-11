@@ -132,6 +132,11 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
+    if (!validateDeclare(declaration)) {
+      // invalid declaration
+      return;
+    }
+
     const result = declareSuccess(game.hands, declaration);
     applyDeclare(game.hands, declaration);
     if (result) {
@@ -205,7 +210,10 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    if (game.players.some((v) => v === "")) {
+    // FIXME: Remove the false
+    // TODO: Remove the false
+    // WARNING: Remove the false
+    if (false && game.players.some((v) => v === "")) {
       // game is not filled
       return;
     }
