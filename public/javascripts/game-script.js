@@ -312,6 +312,28 @@ const onLoad = () => {
     false
   );
 
+  declareBtn.addEventListener("click", () => {
+    if (mode === MODES.NORMAL) {
+      // Do something
+      mode = MODES.DECLARE;
+    } else if (mode === MODES.DECLARE && Object.keys(declareObj).length === 6) {
+      socket.emit("game:play:declare", game.gameId, declareObj);
+      mode = MODES.normal;
+    }
+  });
+
+  requestBtn.addEventListener("click", () => {
+    if (mode === MODES.NORMAL) {
+      mode = MODES.REQUEST;
+    }
+  });
+
+  transferBtn.addEventListener("click", () => {
+    if (mode === MODES.NORMAL) {
+      mode = MODES.TRANSFER;
+    }
+  });
+
   const addDeclared = (halfSet) => {
     game.declared.push(halfSet);
   };
