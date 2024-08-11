@@ -282,13 +282,14 @@ input.player-name#self-name {
   position: relative;
 
   height: var(--total-height);
-  width: calc(var(--total-width) / 4);
+  width: calc(var(--total-width) / 3);
 }
 
 #outer-declare-area {
   height: 80%;
   width: 80%;
 
+  /* Center the div :/ */
   margin: 0;
   position: absolute;
   top: 50%;
@@ -302,14 +303,21 @@ input.player-name#self-name {
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(2, 40%);
-  grid-template-rows: repeat(4, 20%);
+  grid-template-columns: repeat(2, 45%);
+  grid-template-rows: repeat(4, 22.5%);
   align-content: center;
   justify-content: center;
 }
 
 .half-set {
+  margin: 3px;
+  padding: 2px;
+  border: 1px solid grey;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  overflow: hidden;
+}
+
+.half-set .card {
+  flex: 1;
 }
