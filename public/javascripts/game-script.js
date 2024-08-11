@@ -3,10 +3,13 @@
 import { ASK_DELAY, NAME_LEN } from "../shared_js/constants.js";
 
 const Enum = (arr) =>
-  arr.reduce((acc, val) => ({
-    ...acc,
-    [val]: val,
-  }), Object.create(null));
+  arr.reduce(
+    (acc, val) => ({
+      ...acc,
+      [val]: val,
+    }),
+    Object.create(null)
+  );
 
 const onLoad = () => {
   const joinPage = document.getElementById("join-page");
@@ -26,7 +29,7 @@ const onLoad = () => {
 
   const socket = io();
 
-  const MODES = Enum(["NORMAL", 'DECLARE', 'REQUEST', 'TRANSFER']);
+  const MODES = Enum(["NORMAL", "DECLARE", "REQUEST", "TRANSFER"]);
 
   let mode = MODES.NORMAL;
 
@@ -74,7 +77,7 @@ const onLoad = () => {
 
     Array.prototype.forEach.call(
       document.getElementsByClassName("player"),
-      (element) => {
+      (element, index) => {
         element.classList.add("hidden");
         element.classList.remove("ally", "opp");
         element.onclick = undefined;
@@ -86,10 +89,42 @@ const onLoad = () => {
     });
   };
 
+  let selectedCard = -1;
+  let declareObj = {};
+
   const onClickPlayer = (index) => {
     const seat = unconvertSeatPos(index);
-
-  }
+    return (event) => {
+      switch (mode) {
+        case MODES.NORMAL:
+          break;
+        case MODES.DECLARE:
+          if (selectedCard !== -1 && index % 2 === 0) {
+            if (!(selectedCard in declareObj)) {
+              declareObj[selectedCard] = seat;
+            }
+            selectedCard = -1;
+          }
+          break;
+        case MODES.REQUEST:
+          if (index % 2 === 1) {
+            socket.emit("game:play:ask", game.gameId, selectedCard, seat);
+            selectedCard = -1;
+          }
+          break;
+        case MODES.TRANSFER:
+          if (
+            game.handCounts[seat] > 0 &&
+            (index % 2 === 0 ||
+              game.handCounts.every((v, i) => i % 2 === 0 || v > 0))
+          ) {
+            socket.emit("game:play:transfer", game.gameId, seat);
+          }
+          break;
+      }
+      event.stopPropagation();
+    };
+  };
 
   const CARD_BACK = '<div class="card card-back-blue"></div>';
 
@@ -159,6 +194,8 @@ const onLoad = () => {
     Array.prototype.forEach.call(players, (element, index) => {
       element.classList.remove("hidden");
       element.classList.add(index % 2 === 0 ? "ally" : "opp");
+
+      element.onclick = onClickPlayer(index);
     });
   };
 
@@ -270,6 +307,8 @@ const onLoad = () => {
     });
   };
   const drawSelfHand = () => {
+    // TODO: implement sorting that separates half suits and same color suits
+    game.hand.sort();
     players[0].querySelector(".player-cards").innerHTML = game.hand
       .map((card) => `<div class="card card-${CARD_MAP[card]}"></div>`)
       .join("");
