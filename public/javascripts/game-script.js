@@ -31,7 +31,30 @@ const onLoad = () => {
 
   const MODES = Enum(["NORMAL", "DECLARE", "REQUEST", "TRANSFER"]);
 
-  let mode = MODES.NORMAL;
+  const modeObj = (() => {
+    // incomplete
+    let mode = MODES.NORMAL;
+    
+    const listeners = [];
+    const addListener = (listener) => {
+      listeners.push(listener);
+    };
+    const removeListener = (listener) => {
+      const index = listeners.indexOf(listener);
+      if (index !== -1) {
+        listeners.splice(index, 1);
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    return {
+      addListener,
+      removeListener,
+    };
+  })();
+  let mode = setModeMODES.NORMAL;
 
   const createGame = (maxPlayers) => ({
     gameId: "",
