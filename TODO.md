@@ -9,3 +9,5 @@
 - Add reconnection features
 - Add persistent id
 - Add option to cut-off games once a winner is determined
+- Probably switch to Vue
+- Probably switch to TypeScript
