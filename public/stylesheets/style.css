@@ -311,6 +311,12 @@ input.player-name#self-name {
   justify-items: center;
 }
 
+#ask-card .card {
+  /* Looks bad but oh well */
+  height: 100%;
+  width: 100%;
+}
+
 #ask-success,
 #ask-failure {
   display: none;

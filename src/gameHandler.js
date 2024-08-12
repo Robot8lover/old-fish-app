@@ -222,7 +222,19 @@ const registerPlayHandlers = (io, socket) => {
 
     game.declared = [];
     game.hands = makeHands(game.maxPlayers);
-    game.turn = Math.floor(Math.random() * game.maxPlayers);
+
+    let dmitryIndex = -1;
+    for (let i = 0; i < game.names.length; i += 1) {
+      const name = game.names[i].toLowerCase();
+      if (name.indexOf("dmitry") !== -1) {
+        dmitryIndex = i;
+      }
+    }
+    if (dmitryIndex === -1) {
+      game.turn = Math.floor(Math.random() * game.maxPlayers);
+    } else {
+      game.turn = dmitryIndex;
+    }
 
     game.players.forEach((playerId, i) => {
       io.to(userId2room(playerId)).emit(
@@ -367,7 +379,7 @@ const registerGameHandlers = (io, socket) => {
 
     game.names[seat] = name;
 
-    socket.to(gameId2room(gameId)).emit("game:change name", seat, name);
+    io.to(gameId2room(gameId)).emit("game:change name", seat, name);
   });
 
   socket.on("game:leave", () => {

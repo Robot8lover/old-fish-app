@@ -26,6 +26,10 @@ const onLoad = () => {
   const declareBtn = document.getElementById("declare-btn");
   const requestBtn = document.getElementById("request-btn");
   const transferBtn = document.getElementById("transfer-btn");
+  const askAskerDiv = document.getElementById("ask-asker");
+  const askTargetDiv = document.getElementById("ask-target");
+  const askCardDiv = document.getElementById("ask-card");
+  const askResultDiv = document.getElementById("ask-result");
 
   const socket = io();
 
@@ -107,6 +111,11 @@ const onLoad = () => {
     document.querySelectorAll(".player-cards").forEach((element) => {
       element.innerHTML = "";
     });
+
+    askAskerDiv.innerHTML = "";
+    askTargetDiv.innerHTML = "";
+    askCardDiv.innerHTML = "";
+    askResultDiv.classList.remove("success", "failure");
 
     if (host) {
       startBtn.classList.remove("hidden");
@@ -495,19 +504,21 @@ const onLoad = () => {
   selfName.maxLength = NAME_LEN;
   selfName.addEventListener("change", changeMyName, false);
 
+  const drawAsk = (card, seat, target, result) => {
+    askAskerDiv.textContent = `${game.names[seat]} (${convertSeatPos(seat)})`;
+    askTargetDiv.textContent = `${game.names[target]} (${convertSeatPos(
+      target
+    )})`;
+    askCardDiv.innerHTML = cardStrToDiv(CARD_MAP[card]);
+    askResultDiv.classList.remove("success", "failure");
+    askResultDiv.classList.add(result ? "success" : "failure");
+  };
+
   socket.on("game:play:ask success", (card, seat, target) => {
-    playArea.innerHTML = `${game.names[seat]} (${convertSeatPos(
-      seat
-    )}) successfully requested ${card} from ${
-      game.names[target]
-    } (${convertSeatPos(target)})`;
+    drawAsk(card, seat, target, true);
   });
   socket.on("game:play:ask fail", (card, seat, target) => {
-    playArea.innerHTML = `${game.names[seat]} (${convertSeatPos(
-      seat
-    )}) unsuccessfully requested ${card} from ${
-      game.names[target]
-    } (${convertSeatPos(target)})`;
+    drawAsk(card, seat, target, false);
   });
 
   socket.on("game:play:transfer", (seat, target) => {
