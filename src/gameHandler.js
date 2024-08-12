@@ -60,14 +60,14 @@ const registerPlayHandlers = (io, socket) => {
   };
 
   socket.on("game:play:ask", (gameId, card, target) => {
-    if (game.nextAskTime > Date.now()) {
-      // must wait to make next ask
-      return;
-    }
-
     const game = games[gameId];
     if (!game) {
       // game does not exist
+      return;
+    }
+
+    if (game.nextAskTime > Date.now()) {
+      // must wait to make next ask
       return;
     }
 
@@ -236,6 +236,7 @@ const registerPlayHandlers = (io, socket) => {
         i
       );
     });
+    emitToGame(gameId, "game:play:transfer", game.turn, game.turn);
   });
 };
 
@@ -385,7 +386,7 @@ export default (io, socket) => {
   registerGameHandlers(io, socket);
   registerPlayHandlers(io, socket);
 
-  /*
+  //*
   // for debugging
   socket.onAny((event, ...args) => {
     console.log(`Event: "${event}"`, args);

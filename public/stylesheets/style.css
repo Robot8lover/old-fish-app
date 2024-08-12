@@ -211,6 +211,11 @@ input.player-name#self-name {
   width: calc(2 * var(--name-width));
 }
 
+.player-cards .card {
+  height: 190px;
+  width: 140px;
+}
+
 .player-turn {
   position: absolute;
   right: 0.1em;
@@ -283,19 +288,44 @@ input.player-name#self-name {
 
   height: var(--total-height);
   width: calc(var(--total-width) / 3);
+
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+
+  align-items: center;
+  justify-items: center;
+}
+
+#last-ask {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+#last-ask > div {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+}
+
+#ask-success,
+#ask-failure {
+  display: none;
+  width: 100%;
+  height: auto;
+}
+
+.success #ask-success,
+.failure #ask-failure {
+  display: block;
 }
 
 #outer-declare-area {
-  height: 80%;
-  width: 80%;
-
-  /* Center the div :/ */
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  height: 90%;
+  width: 90%;
 }
 
 #declare-area {

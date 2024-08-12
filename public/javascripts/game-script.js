@@ -32,9 +32,8 @@ const onLoad = () => {
   const MODES = Enum(["NORMAL", "DECLARE", "REQUEST", "TRANSFER"]);
 
   const modeObj = (() => {
-    // incomplete
     let mode = MODES.NORMAL;
-    
+
     const listeners = [];
     const addListener = (listener) => {
       listeners.push(listener);
@@ -47,14 +46,36 @@ const onLoad = () => {
       } else {
         return false;
       }
-    }
+    };
+
+    const setMode = (newMode) => {
+      const oldMode = mode;
+      mode = newMode;
+      for (const func of listeners) {
+        func(oldMode, newMode);
+      }
+    };
+
+    const getMode = () => mode;
+
+    const resetMode = () => {
+      setMode(MODES.NORMAL);
+    };
+
+    const reset = () => {
+      listeners.splice(0);
+      resetMode();
+    };
 
     return {
       addListener,
       removeListener,
+      getMode,
+      setMode,
+      resetMode,
+      reset,
     };
   })();
-  let mode = setModeMODES.NORMAL;
 
   const createGame = (maxPlayers) => ({
     gameId: "",
@@ -64,6 +85,7 @@ const onLoad = () => {
     seat: -1,
     hand: [],
     turn: -1,
+    names: [],
   });
 
   let game = createGame(0);
@@ -132,7 +154,7 @@ const onLoad = () => {
     // function factory
     const seat = unconvertSeatPos(index);
     return (event) => {
-      switch (mode) {
+      switch (modeObj.getMode()) {
         case MODES.NORMAL:
           break;
         case MODES.DECLARE:
@@ -163,7 +185,7 @@ const onLoad = () => {
 
   const onClickWindow = (event) => {
     // actual event listener
-    mode = MODES.NORMAL;
+    modeObj.resetMode();
     selectedCard = -1;
   };
 
@@ -335,26 +357,36 @@ const onLoad = () => {
     false
   );
 
-  declareBtn.addEventListener("click", () => {
+  declareBtn.addEventListener("click", (event) => {
+    const mode = modeObj.getMode();
     if (mode === MODES.NORMAL) {
       // Do something
-      mode = MODES.DECLARE;
+      modeObj.setMode("DECLARE");
     } else if (mode === MODES.DECLARE && Object.keys(declareObj).length === 6) {
       socket.emit("game:play:declare", game.gameId, declareObj);
-      mode = MODES.normal;
+      modeObj.resetMode();
+    }
+    event.stopPropagation();
+  });
+
+  requestBtn.addEventListener("click", (event) => {
+    if (modeObj.getMode() === MODES.NORMAL) {
+      selectedCard = CARD_MAP.indexOf(
+        prompt("What card do you want? (suit then rank, jokers are RO and BO)")
+          .replaceAll(" ", "")
+          .toUpperCase()
+      );
+      alert("Now click on a player.");
+      modeObj.setMode(MODES.REQUEST);
+      event.stopPropagation();
     }
   });
 
-  requestBtn.addEventListener("click", () => {
-    if (mode === MODES.NORMAL) {
-      mode = MODES.REQUEST;
+  transferBtn.addEventListener("click", (event) => {
+    if (modeObj.getMode() === MODES.NORMAL) {
+      modeObj.setMode(MODES.TRANSFER);
     }
-  });
-
-  transferBtn.addEventListener("click", () => {
-    if (mode === MODES.NORMAL) {
-      mode = MODES.TRANSFER;
-    }
+    event.stopPropagation();
   });
 
   const addDeclared = (halfSet) => {
@@ -448,12 +480,13 @@ const onLoad = () => {
   });
 
   socket.on("game:change name", (seat, name) => {
+    game.names[seat] = name;
     if (seat === game.seat) {
       // self name so do not make an update
       return;
     }
     players[convertSeatPos(seat)].querySelector(".player-name").textContent =
-      name; // This should be escaped I think.
+      name; // This will be escaped I think.
   });
 
   const changeMyName = () => {
@@ -480,9 +513,15 @@ const onLoad = () => {
   socket.on("game:play:transfer", (seat, target) => {
     setTurn(target);
     drawTurn();
+
+    if (game.turn === game.seat) {
+      requestBtn.classList.remove("vis-hidden");
+    } else {
+      requestBtn.classList.add("vis-hidden");
+    }
   });
 
-  /*
+  //*
   // for debugging
   socket.onAny((event, ...args) => {
     console.log(`Event: "${event}"`, args);
