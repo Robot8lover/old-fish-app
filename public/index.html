@@ -33,6 +33,7 @@
       href="../images/favicons/favicon.ico"
     />
 
+    <link rel="stylesheet" type="text/css" href="/dialog-polyfill.css" />
     <link rel="stylesheet" href="stylesheets/form-style.css" />
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="stylesheet" href="stylesheets/cards.css" />
@@ -94,7 +95,12 @@
           </div>
         </div>
 
-        <div id="game-body">
+        <div aria-labelledby="ask-dialog-title" id="game-body">
+          <dialog id="ask-dialog" class="fixed">
+            <h2 id="ask-dialog-title">What card do you want to ask for?</h2>
+            <div id="ask-options"></div>
+            <button id="close-ask-dialog" type="button">Cancel</button>
+          </dialog>
           <div id="game-left">
             <!-- area for play and display of players and plays -->
 
@@ -186,8 +192,18 @@
               <div id="ask-target"></div>
               <div id="ask-card"></div>
               <div id="ask-result">
-                <img id="ask-success" src="./images/checkmark.png" height="512" width="512">
-                <img id="ask-failure" src="./images/letter_x.png" height="512" width="512">
+                <img
+                  id="ask-success"
+                  src="./images/checkmark.png"
+                  height="512"
+                  width="512"
+                />
+                <img
+                  id="ask-failure"
+                  src="./images/letter_x.png"
+                  height="512"
+                  width="512"
+                />
               </div>
             </div>
 

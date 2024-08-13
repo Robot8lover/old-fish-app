@@ -1,6 +1,7 @@
 "use strict";
 
 import { ASK_DELAY, NAME_LEN } from "../shared_js/constants.js";
+import dialogPolyfill from "/dialog-polyfill.esm.js";
 
 const Enum = (arr) =>
   arr.reduce(
@@ -30,6 +31,8 @@ const onLoad = () => {
   const askTargetDiv = document.getElementById("ask-target");
   const askCardDiv = document.getElementById("ask-card");
   const askResultDiv = document.getElementById("ask-result");
+  const askDialog = document.getElementById("ask-dialog");
+  const closeAskDialogBtn = document.getElementById("close-ask-dialog");
 
   const socket = io();
 
@@ -380,6 +383,7 @@ const onLoad = () => {
 
   requestBtn.addEventListener("click", (event) => {
     if (modeObj.getMode() === MODES.NORMAL) {
+      askDialog.showModal();
       selectedCard = CARD_MAP.indexOf(
         prompt("What card do you want? (suit then rank, jokers are RO and BO)")
           .replaceAll(" ", "")

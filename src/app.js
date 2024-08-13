@@ -40,6 +40,7 @@ app.use(express.static(path.join(path.dirname(__dirname), "public")));
 app.use(
   express.static(path.join(path.dirname(__dirname), "public/images/favicons"))
 );
+app.use(express.static(path.join(path.dirname(__dirname), "node_modules/dialog-polyfill/dist")));
 
 app.set("port", port);
 const server = http.createServer(app);
