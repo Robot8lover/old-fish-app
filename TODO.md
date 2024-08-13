@@ -1,5 +1,13 @@
 # To Do:
 
+## Important
+
+- Add emit for hand changes after declares and successful requests.
+- Fix red joker card again, I see the border is gone.
+
+
+## Nice things for later
+
 - Simplify and improve color scheme
 - Possibly use a different font
 - Make buttons prettier

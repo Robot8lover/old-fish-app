@@ -32,11 +32,21 @@ const onLoad = () => {
   const askCardDiv = document.getElementById("ask-card");
   const askResultDiv = document.getElementById("ask-result");
   const askDialog = document.getElementById("ask-dialog");
+  const askOptions = document.getElementById("ask-options");
   const closeAskDialogBtn = document.getElementById("close-ask-dialog");
+  const selfCards = document.getElementById("self-cards");
+
+  dialogPolyfill.registerDialog(askDialog);
 
   const socket = io();
 
-  const MODES = Enum(["NORMAL", "DECLARE", "REQUEST", "TRANSFER"]);
+  const MODES = Enum([
+    "NORMAL",
+    "DECLARE",
+    "SELECT_CARD",
+    "REQUEST",
+    "TRANSFER",
+  ]);
 
   const modeObj = (() => {
     let mode = MODES.NORMAL;
@@ -160,15 +170,13 @@ const onLoad = () => {
   });
 
   let selectedCard = -1;
-  let declareObj = createDeclarer(0);
+  let declareObj = createDeclarer(-1);
 
   const onClickPlayer = (index) => {
     // function factory
     const seat = unconvertSeatPos(index);
     return (event) => {
       switch (modeObj.getMode()) {
-        case MODES.NORMAL:
-          break;
         case MODES.DECLARE:
           if (selectedCard !== -1 && index % 2 === 0) {
             declareObj.addCard(selectedCard, seat);
@@ -190,6 +198,8 @@ const onLoad = () => {
             socket.emit("game:play:transfer", game.gameId, seat);
           }
           break;
+        default:
+          return;
       }
       event.stopPropagation();
     };
@@ -369,6 +379,14 @@ const onLoad = () => {
     false
   );
 
+  document.getElementById("close-ask-dialog").addEventListener(
+    "click",
+    () => {
+      askDialog.close();
+    },
+    false
+  );
+
   declareBtn.addEventListener("click", (event) => {
     const mode = modeObj.getMode();
     if (mode === MODES.NORMAL) {
@@ -383,14 +401,7 @@ const onLoad = () => {
 
   requestBtn.addEventListener("click", (event) => {
     if (modeObj.getMode() === MODES.NORMAL) {
-      askDialog.showModal();
-      selectedCard = CARD_MAP.indexOf(
-        prompt("What card do you want? (suit then rank, jokers are RO and BO)")
-          .replaceAll(" ", "")
-          .toUpperCase()
-      );
-      alert("Now click on a player.");
-      modeObj.setMode(MODES.REQUEST);
+      modeObj.setMode(MODES.SELECT_CARD);
       event.stopPropagation();
     }
   });
@@ -420,7 +431,7 @@ const onLoad = () => {
 
   const drawDeclareArea = () => {
     // FIXME: Make them actually visible rather than crammed together.
-    declareArea.innerHTML = "";
+    /*declareArea.innerHTML = "";
     for (const halfSet of HALF_SETS.slice(0, NUM_HALF_SETS[game.maxPlayers])) {
       const element = document.createElement("div");
       element.className = "half-set";
@@ -428,7 +439,7 @@ const onLoad = () => {
         element.innerHTML += cardStrToDiv(cardStr);
       }
       declareArea.appendChild(element);
-    }
+    }*/
   };
 
   const drawHands = () => {
@@ -445,13 +456,55 @@ const onLoad = () => {
       )}`;
     });
   };
+
   const drawSelfHand = () => {
     // TODO: implement sorting that separates half suits and same color suits
     game.hand.sort();
     players[0].querySelector(".player-cards").innerHTML = game.hand
       .map((card) => cardStrToDiv(CARD_MAP[card]))
       .join("");
+
+    const cards = selfCards.querySelectorAll(".card");
+    cards.forEach((element, i) => {
+      element.addEventListener("click", (event) => {
+        if (
+          game.turn !== game.seat ||
+          modeObj.getMode() !== MODES.SELECT_CARD
+        ) {
+          return;
+        }
+
+        event.stopPropagation();
+
+        modeObj.resetMode();
+        selectedCard = -1;
+
+        // I'm a little worried about the implicit requirement here
+        // that the hand and elements must match order.
+        const halfSetBase = game.hand[i] - (game.hand[i] % 6);
+        const halfSet = [0, 1, 2, 3, 4, 5]
+          .map((offset) => halfSetBase + offset)
+          .filter((card) => !game.hand.includes(card));
+        askOptions.innerHTML = halfSet
+          .map((card) => cardStrToDiv(CARD_MAP[card]))
+          .join("");
+        askOptions.querySelectorAll(".card").forEach((askCardElement, j) => {
+          askCardElement.addEventListener(
+            "click",
+            (askCardClickEvent) => {
+              askCardClickEvent.stopPropagation();
+              selectedCard = halfSet[j];
+              modeObj.setMode(MODES.REQUEST);
+              askDialog.close();
+            },
+            false
+          );
+        });
+        askDialog.showModal();
+      });
+    }, false);
   };
+
   const drawTurn = () => {
     const turn = convertSeatPos(game.turn);
     Array.prototype.forEach.call(players, (player, index) => {

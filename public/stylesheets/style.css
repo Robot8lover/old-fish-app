@@ -113,6 +113,19 @@ div#game-right {
   margin-left: 0em;
 }
 
+#ask-dialog {
+  width: 80%;
+  height: 80%;
+}
+
+#ask-options {
+  display: flex;
+  flex-flow: row wrap;
+  overflow: hidden;
+  justify-content: space-evenly; /* or maybe space-around */
+  margin: 10px 5px;
+}
+
 div#game-left {
   /*
     now old:
