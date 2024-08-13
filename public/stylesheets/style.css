@@ -357,3 +357,5 @@ input.player-name#self-name {
 .half-set .card {
   flex: 1;
 }
+
+/* hm we can scale cards it's only funny for the hands (probably because of our stacking thing) */

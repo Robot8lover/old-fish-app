@@ -161,9 +161,9 @@
   background-position: -140px -760px;
 }
 
-.card.card-RO {
+/* .card.card-RO {
   background-position: -140px -570px;
-}
+} */
 
 .card.card-ST {
   background-position: -0px -760px;
@@ -219,6 +219,10 @@
 
 .card.card-BO {
   background-image: url("../images/cardBlackJoker.png");
+}
+
+.card.card-RO {
+  background-image: url("../images/cardRedJoker.png");
 }
 
 .card.card-back-blue {
