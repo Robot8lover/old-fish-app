@@ -459,7 +459,7 @@ const onLoad = () => {
 
   const drawSelfHand = () => {
     // TODO: implement sorting that separates half suits and same color suits
-    game.hand.sort();
+    game.hand.sort((a, b) => b - a);
     players[0].querySelector(".player-cards").innerHTML = game.hand
       .map((card) => cardStrToDiv(CARD_MAP[card]))
       .join("");
