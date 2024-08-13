@@ -52,11 +52,21 @@ const createUser = (userId) => {
   };
 };
 
+const getHandCounts = (gameId) => games[gameId].hands.map((hand) => hand.size);
+
 const registerPlayHandlers = (io, socket) => {
   const userId = socket.id;
 
   const emitToGame = (gameId, eventName, ...args) => {
     io.to(gameId2room(gameId)).emit(eventName, ...args);
+  };
+
+  const emitUpdateCards = (gameId) => {
+    const handCounts = getHandCounts(gameId);
+    const game = games[gameId];
+    game.players.forEach((playerId, i) => {
+      io.to(userId2room(playerId)).emit("game:play:update cards", handCounts, Array.from(game.hands[i]));
+    });
   };
 
   socket.on("game:play:ask", (gameId, card, target) => {
@@ -103,6 +113,7 @@ const registerPlayHandlers = (io, socket) => {
       game.hands[target].delete(card);
       game.hands[seat].add(card);
       emitToGame(gameId, "game:play:ask success", card, seat, target);
+      emitUpdateCards(gameId);
     } else {
       // target player does not have card
       // unsuccessful ask
@@ -144,6 +155,8 @@ const registerPlayHandlers = (io, socket) => {
     } else {
       emitToGame(gameId, "game:play:declare fail", declaration, seat);
     }
+
+    emitUpdateCards(gameId);
 
     if (game.hands.every((hand) => hand.size === 0)) {
       game.playing = false;
