@@ -1,7 +1,7 @@
 "use strict";
 
 import { ASK_DELAY, NAME_LEN } from "../shared_js/constants.js";
-import dialogPolyfill from "/dialog-polyfill.esm.js";
+import dialogPolyfill from "./dialog-polyfill.esm.js";
 
 const Enum = (arr) =>
   arr.reduce(
@@ -40,6 +40,7 @@ const onLoad = () => {
   const selfCards = document.getElementById("self-cards");
 
   dialogPolyfill.registerDialog(askDialog);
+  dialogPolyfill.registerDialog(declareDialog);
 
   const socket = io();
 
