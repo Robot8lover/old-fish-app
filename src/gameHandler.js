@@ -5,7 +5,9 @@ import {
   validateMaxPlayers,
   makeHands,
 } from "./cards.js";
-import { ASK_DELAY, NAME_LEN } from "../public/shared_js/constants.js";
+
+const ASK_DELAY = 1000 * 5; // Delay between asks (ms)
+const NAME_LEN = 16; // Max character length of a name
 
 const testHex = (text) => /^[0-9A-Fa-f]+$/.test(text);
 

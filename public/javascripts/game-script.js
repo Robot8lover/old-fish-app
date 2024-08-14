@@ -1,6 +1,5 @@
 "use strict";
 
-import { ASK_DELAY, NAME_LEN } from "../shared_js/constants.js";
 import dialogPolyfill from "./dialog-polyfill.esm.js";
 
 const Enum = (arr) =>
@@ -569,7 +568,6 @@ const onLoad = () => {
   const changeMyName = () => {
     socket.emit("game:change name", game.gameId, selfName.value);
   };
-  selfName.maxLength = NAME_LEN;
   selfName.addEventListener("change", changeMyName, false);
 
   const drawAsk = (card, seat, target, result) => {

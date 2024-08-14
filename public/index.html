@@ -33,7 +33,11 @@
       href="../images/favicons/favicon.ico"
     />
 
-    <link rel="stylesheet" type="text/css" href="stylesheets/dialog-polyfill.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="stylesheets/dialog-polyfill.css"
+    />
     <link rel="stylesheet" href="stylesheets/form-style.css" />
     <link rel="stylesheet" href="stylesheets/style.css" />
     <link rel="stylesheet" href="stylesheets/cards.css" />
@@ -102,7 +106,9 @@
             <button id="close-ask-dialog" type="button">Cancel</button>
           </dialog>
           <dialog aria-labelledby="declare-dialog-title" id="declare-dialog">
-            <h2 id="declare-dialog-title">What half-set do you wish to declare?</h2>
+            <h2 id="declare-dialog-title">
+              What half-set do you wish to declare?
+            </h2>
             <div id="declare-options"></div>
             <button id="close-ask-dialog" type="button">Cancel</button>
           </dialog>
@@ -117,6 +123,7 @@
                   name="self-name"
                   id="self-name"
                   class="player-name"
+                  maxlength="16"
                 />
               </div>
               <div id="self-cards" class="player-cards"></div>
