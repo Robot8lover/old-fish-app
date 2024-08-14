@@ -34,6 +34,9 @@ const onLoad = () => {
   const askDialog = document.getElementById("ask-dialog");
   const askOptions = document.getElementById("ask-options");
   const closeAskDialogBtn = document.getElementById("close-ask-dialog");
+  const declareDialog = document.getElementById("declare-dialog");
+  const declareOptions = document.getElementById("declare-options");
+  const closeDeclareDialogBtn = document.getElementById("close-declare-dialog");
   const selfCards = document.getElementById("self-cards");
 
   dialogPolyfill.registerDialog(askDialog);
@@ -533,6 +536,13 @@ const onLoad = () => {
     drawHands();
     drawSelfHand();
     drawTurn();
+  });
+
+  socket.on("game:play:update cards", (handCounts, hand) => {
+    setHand(hand);
+    handCounts.forEach(setHandCount);
+    drawHands();
+    drawSelfHand();
   });
 
   startBtn.addEventListener("click", () => {
