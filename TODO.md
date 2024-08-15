@@ -8,6 +8,8 @@
 
 ## Nice things for later
 
+- Probably use an escape button for mode instead of just clicking anywhere.
+- Add keybinds
 - Simplify and improve color scheme
 - Possibly use a different font
 - Make buttons prettier

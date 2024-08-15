@@ -6,6 +6,8 @@ import http from "http";
 import debugModule from "debug";
 const debug = debugModule("fish-app:server");
 
+import compression from "compression";
+
 import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
 
@@ -32,6 +34,7 @@ io.on("connection", onConnection);
 
 io.on("error", onSocketError);
 
+app.use(compression())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

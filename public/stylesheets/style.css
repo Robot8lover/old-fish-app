@@ -113,12 +113,14 @@ div#game-right {
   margin-left: 0em;
 }
 
-#ask-dialog {
+#ask-dialog,
+#declare-dialog {
   width: 80%;
   height: 80%;
 }
 
-#ask-options {
+#ask-options,
+#declare-options {
   display: flex;
   flex-flow: row wrap;
   overflow: hidden;
@@ -358,7 +360,7 @@ input.player-name#self-name {
   justify-content: center;
 }
 
-.half-set {
+#declare-cards {
   margin: 3px;
   padding: 2px;
   border: 1px solid grey;

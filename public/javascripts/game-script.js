@@ -23,6 +23,7 @@ const onLoad = () => {
   const actionArea = document.getElementById("action-area");
   const playArea = document.getElementById("play-area");
   const declareArea = document.getElementById("declare-area");
+  const declareCards = document.getElementById("declare-cards");
   const declareBtn = document.getElementById("declare-btn");
   const requestBtn = document.getElementById("request-btn");
   const transferBtn = document.getElementById("transfer-btn");
@@ -100,7 +101,7 @@ const onLoad = () => {
   const createGame = (maxPlayers) => ({
     gameId: "",
     maxPlayers: maxPlayers,
-    declared: [],
+    declared: [[], []],
     handCounts: new Array(maxPlayers).fill(0),
     seat: -1,
     hand: [],
@@ -390,31 +391,97 @@ const onLoad = () => {
     false
   );
 
-  declareBtn.addEventListener("click", (event) => {
-    const mode = modeObj.getMode();
-    if (mode === MODES.NORMAL) {
-      // Do something
-      modeObj.setMode("DECLARE");
-    } else if (mode === MODES.DECLARE && Object.keys(declareObj).length === 6) {
-      socket.emit("game:play:declare", game.gameId, declareObj);
-      modeObj.resetMode();
-    }
-    event.stopPropagation();
-  });
+  document.getElementById("close-declare-dialog").addEventListener(
+    "click",
+    () => {
+      declareDialog.close();
+    },
+    false
+  );
 
-  requestBtn.addEventListener("click", (event) => {
-    if (modeObj.getMode() === MODES.NORMAL) {
-      modeObj.setMode(MODES.SELECT_CARD);
+  declareBtn.addEventListener(
+    "click",
+    (event) => {
+      const mode = modeObj.getMode();
+      if (modeObj.getMode() !== MODES.NORMAL) {
+        return;
+      }
+
       event.stopPropagation();
-    }
-  });
 
-  transferBtn.addEventListener("click", (event) => {
-    if (modeObj.getMode() === MODES.NORMAL) {
-      modeObj.setMode(MODES.TRANSFER);
-    }
-    event.stopPropagation();
-  });
+      const halfSetBases = new Array(NUM_HALF_SETS[game.maxPlayers])
+        .fill(0)
+        .map((v, i) => 6 * i)
+        .filter(
+          (setIndex) =>
+            !declared[0].includes(setIndex) && !declared[1].includes(setIndex)
+        );
+
+      // TODO: add declare send button to actually emit the event and all
+
+      declareOptions.innerHTML = halfSetBases
+        .map((card) => cardStrToDiv(CARD_MAP[card]))
+        .join("");
+
+      declareOptions.querySelectorAll(".").forEach((element, i) => {
+        element.addEventListener(
+          "click",
+          (optionsClickEvent) => {
+            const base = halfSetBases[i];
+            optionsClickEvent.stopPropagation();
+            declareObj = createDeclarer(Math.floor(base / 6));
+            const halfSetCards = [0, 1, 2, 3, 4, 5].map(
+              (offset) => base + offset
+            );
+            declareCards.innerHTML = halfSetCards
+              .map((card) => cardStr(CARD_MAP[card]))
+              .join("");
+            declareCards.querySelectorAll(".card").forEach((cardElement, k) => {
+              // I'm a javascript dev;
+              // of course I think it's a great idea
+              // to have a third nested event listener callback.
+              cardElement.addEventListener(
+                "click",
+                (cardClickEvent) => {
+                  cardClickEvent.stopPropagation();
+                  selectedCard = halfSetCards[k];
+                  modeObj.setMode(MODES.DECLARE);
+                },
+                false
+              );
+            });
+            declareDialog.close();
+          },
+          false
+        );
+
+        declareDialog.showModal();
+      });
+    },
+    false
+  );
+
+  requestBtn.addEventListener(
+    "click",
+    (event) => {
+      if (modeObj.getMode() === MODES.NORMAL) {
+        modeObj.setMode(MODES.SELECT_CARD);
+        event.stopPropagation();
+      }
+    },
+    false
+  );
+
+  transferBtn.addEventListener(
+    "click",
+    (event) => {
+      if (modeObj.getMode() === MODES.NORMAL) {
+        modeObj.setMode(MODES.TRANSFER);
+      }
+      event.stopPropagation();
+    },
+    false
+  );
 
   const addDeclared = (halfSet) => {
     game.declared.push(halfSet);
@@ -469,43 +536,47 @@ const onLoad = () => {
 
     const cards = selfCards.querySelectorAll(".card");
     cards.forEach((element, i) => {
-      element.addEventListener("click", (event) => {
-        if (
-          game.turn !== game.seat ||
-          modeObj.getMode() !== MODES.SELECT_CARD
-        ) {
-          return;
-        }
+      element.addEventListener(
+        "click",
+        (event) => {
+          if (
+            game.turn !== game.seat ||
+            modeObj.getMode() !== MODES.SELECT_CARD
+          ) {
+            return;
+          }
 
-        event.stopPropagation();
+          event.stopPropagation();
 
-        modeObj.resetMode();
-        selectedCard = -1;
+          modeObj.resetMode();
+          selectedCard = -1;
 
-        // I'm a little worried about the implicit requirement here
-        // that the hand and elements must match order.
-        const halfSetBase = game.hand[i] - (game.hand[i] % 6);
-        const halfSet = [0, 1, 2, 3, 4, 5]
-          .map((offset) => halfSetBase + offset)
-          .filter((card) => !game.hand.includes(card));
-        askOptions.innerHTML = halfSet
-          .map((card) => cardStrToDiv(CARD_MAP[card]))
-          .join("");
-        askOptions.querySelectorAll(".card").forEach((askCardElement, j) => {
-          askCardElement.addEventListener(
-            "click",
-            (askCardClickEvent) => {
-              askCardClickEvent.stopPropagation();
-              selectedCard = halfSet[j];
-              modeObj.setMode(MODES.REQUEST);
-              askDialog.close();
-            },
-            false
-          );
-        });
-        askDialog.showModal();
-      });
-    }, false);
+          // I'm a little worried about the implicit requirement here
+          // that the hand and elements must match order.
+          const halfSetBase = game.hand[i] - (game.hand[i] % 6);
+          const halfSet = [0, 1, 2, 3, 4, 5]
+            .map((offset) => halfSetBase + offset)
+            .filter((card) => !game.hand.includes(card));
+          askOptions.innerHTML = halfSet
+            .map((card) => cardStrToDiv(CARD_MAP[card]))
+            .join("");
+          askOptions.querySelectorAll(".card").forEach((askCardElement, j) => {
+            askCardElement.addEventListener(
+              "click",
+              (askCardClickEvent) => {
+                askCardClickEvent.stopPropagation();
+                selectedCard = halfSet[j];
+                modeObj.setMode(MODES.REQUEST);
+                askDialog.close();
+              },
+              false
+            );
+          });
+          askDialog.showModal();
+        },
+        false
+      );
+    });
   };
 
   const drawTurn = () => {
@@ -538,16 +609,24 @@ const onLoad = () => {
     drawTurn();
   });
 
-  socket.on("game:play:update cards", (handCounts, hand) => {
-    setHand(hand);
-    handCounts.forEach(setHandCount);
-    drawHands();
-    drawSelfHand();
-  });
+  socket.on(
+    "game:play:update cards",
+    (handCounts, hand) => {
+      setHand(hand);
+      handCounts.forEach(setHandCount);
+      drawHands();
+      drawSelfHand();
+    },
+    false
+  );
 
-  startBtn.addEventListener("click", () => {
-    socket.emit("game:play:start", game.gameId);
-  });
+  startBtn.addEventListener(
+    "click",
+    () => {
+      socket.emit("game:play:start", game.gameId);
+    },
+    false
+  );
 
   const drawResult = () => {};
 
