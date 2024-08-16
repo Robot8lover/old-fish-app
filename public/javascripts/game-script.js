@@ -119,7 +119,7 @@ const onLoad = () => {
     game.gameId = oldGame.gameId;
     game.seat = oldGame.seat;
 
-    declareArea.innerHTML = "";
+    declareCards.innerHTML = "";
     playArea.innerHTML = "";
     document.querySelectorAll(".player-turn").forEach((element) => {
       element.classList.add("hidden");
@@ -414,7 +414,8 @@ const onLoad = () => {
         .map((v, i) => 6 * i)
         .filter(
           (setIndex) =>
-            !declared[0].includes(setIndex) && !declared[1].includes(setIndex)
+            !game.declared[0].includes(setIndex) &&
+            !game.declared[1].includes(setIndex)
         );
 
       // TODO: add declare send button to actually emit the event and all
@@ -423,7 +424,7 @@ const onLoad = () => {
         .map((card) => cardStrToDiv(CARD_MAP[card]))
         .join("");
 
-      declareOptions.querySelectorAll(".").forEach((element, i) => {
+      declareOptions.querySelectorAll(".card").forEach((element, i) => {
         element.addEventListener(
           "click",
           (optionsClickEvent) => {
@@ -434,7 +435,7 @@ const onLoad = () => {
               (offset) => base + offset
             );
             declareCards.innerHTML = halfSetCards
-              .map((card) => cardStr(CARD_MAP[card]))
+              .map((card) => cardStrToDiv(CARD_MAP[card]))
               .join("");
             declareCards.querySelectorAll(".card").forEach((cardElement, k) => {
               // I'm a javascript dev;
