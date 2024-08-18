@@ -174,7 +174,7 @@ div#game-left {
 }
 
 .player,
-#play-area,
+#center-area,
 #action-area,
 #outer-declare-area {
   position: relative;
@@ -273,7 +273,7 @@ input.player-name#self-name {
   grid-area: p8;
 }
 
-#play-area {
+#center-area {
   grid-area: dd;
 }
 
@@ -296,6 +296,12 @@ input.player-name#self-name {
 #action-area .action-btn {
   margin: 5px auto;
   width: 80%;
+}
+
+#center-area .declared-cards {
+  display: flex;
+  flex-flow: row wrap;
+  overflow: hidden;
 }
 
 #game-right {
