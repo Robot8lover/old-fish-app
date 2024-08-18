@@ -33,7 +33,7 @@ const resetGame = (gameId) => {
     hands: new Array(game.maxPlayers),
     nextAskTime: 0,
     playing: false,
-    declared: [],
+    declared: [[], []],
   };
 };
 
@@ -47,7 +47,7 @@ const createGame = (gameId, maxPlayers) => ({
   nextAskTime: 0,
   host: "",
   playing: false,
-  declared: [],
+  declared: [[], []],
 });
 
 const createUser = (userId) => {
@@ -238,7 +238,7 @@ const registerPlayHandlers = (io, socket) => {
 
     game.playing = true;
 
-    game.declared = [];
+    game.declared = [[], []];
     game.hands = makeHands(game.maxPlayers);
 
     let dmitryIndex = -1;
