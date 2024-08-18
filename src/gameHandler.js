@@ -4,9 +4,10 @@ import {
   validateCard,
   validateCardRequest,
   validateMaxPlayers,
-  applyDeclare,
-  declareSuccess,
   validateDeclare,
+  declareSuccess,
+  applyDeclare,
+  gameOver,
 } from "./cards.js";
 
 const ASK_DELAY = 1000 * 5; // Delay between asks (ms)
@@ -163,7 +164,7 @@ const registerPlayHandlers = (io, socket) => {
 
     emitUpdateCards(gameId);
 
-    if (game.hands.every((hand) => hand.size === 0)) {
+    if (gameOver(game)) {
       game.playing = false;
       emitToGame(gameId, "game:play:end"); // let them compute result i guess?
     }
