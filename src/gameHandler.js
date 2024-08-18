@@ -1,9 +1,12 @@
 import { randomBytes } from "node:crypto";
 import {
+  makeHands,
   validateCard,
   validateCardRequest,
   validateMaxPlayers,
-  makeHands,
+  applyDeclare,
+  declareSuccess,
+  validateDeclare,
 } from "./cards.js";
 
 const ASK_DELAY = 1000 * 5; // Delay between asks (ms)
@@ -67,7 +70,11 @@ const registerPlayHandlers = (io, socket) => {
     const handCounts = getHandCounts(gameId);
     const game = games[gameId];
     game.players.forEach((playerId, i) => {
-      io.to(userId2room(playerId)).emit("game:play:update cards", handCounts, Array.from(game.hands[i]));
+      io.to(userId2room(playerId)).emit(
+        "game:play:update cards",
+        handCounts,
+        Array.from(game.hands[i])
+      );
     });
   };
 
@@ -145,18 +152,14 @@ const registerPlayHandlers = (io, socket) => {
       return;
     }
 
-    if (!validateDeclare(declaration)) {
+    if (!validateDeclare(game, declaration)) {
       // invalid declaration
       return;
     }
 
     const result = declareSuccess(game.hands, declaration);
     applyDeclare(game.hands, declaration);
-    if (result) {
-      emitToGame(gameId, "game:play:declare success", declaration, seat);
-    } else {
-      emitToGame(gameId, "game:play:declare fail", declaration, seat);
-    }
+    emitToGame(gameId, "game:play:declare", declaration, seat, result);
 
     emitUpdateCards(gameId);
 
