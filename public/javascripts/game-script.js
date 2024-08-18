@@ -21,9 +21,10 @@ const onLoad = () => {
   const selfName = document.getElementById("self-name");
   const startBtn = document.getElementById("start-btn");
   const actionArea = document.getElementById("action-area");
-  const playArea = document.getElementById("play-area");
+  const centerArea = document.getElementById("center-area");
   const declareArea = document.getElementById("declare-area");
   const declareCards = document.getElementById("declare-cards");
+  const declareSubmit = document.getElementById("declare-submit");
   const declareBtn = document.getElementById("declare-btn");
   const requestBtn = document.getElementById("request-btn");
   const transferBtn = document.getElementById("transfer-btn");
@@ -120,7 +121,10 @@ const onLoad = () => {
     game.seat = oldGame.seat;
 
     declareCards.innerHTML = "";
-    playArea.innerHTML = "";
+    declareSubmit.classList.add("vis-hidden");
+    centerArea.querySelectorAll(".declared-cards").forEach((element) => {
+      element.innerHTML = "";
+    });
     document.querySelectorAll(".player-turn").forEach((element) => {
       element.classList.add("hidden");
     });
@@ -162,13 +166,10 @@ const onLoad = () => {
 
   const createDeclarer = (halfSet) => ({
     halfSet,
-    declares: Object.create(null),
+    declares: new Array(6),
     addCard(card, seat) {
-      if (
-        !(selectedCard in this.declares) &&
-        card - (card % 6) === this.halfSet * 6
-      ) {
-        this.declares[card] = seat;
+      if (card - (card % 6) === this.halfSet * 6) {
+        this.declares[card % 6] = seat;
       }
     },
   });
@@ -437,6 +438,7 @@ const onLoad = () => {
             declareCards.innerHTML = halfSetCards
               .map((card) => cardStrToDiv(CARD_MAP[card]))
               .join("");
+            declareSubmit.classList.remove("vis-hidden");
             declareCards.querySelectorAll(".card").forEach((cardElement, k) => {
               // I'm a javascript dev;
               // of course I think it's a great idea
@@ -484,9 +486,13 @@ const onLoad = () => {
     false
   );
 
-  const addDeclared = (halfSet) => {
-    game.declared.push(halfSet);
-  };
+  declareSubmit.addEventListener(
+    "click",
+    () => {
+      socket.emit("game:play:declare", game.gameId, declareObj);
+    },
+    false
+  );
 
   const setHandCount = (count, position) => {
     game.handCounts[position] = count;
@@ -500,7 +506,14 @@ const onLoad = () => {
     game.hand = hand;
   };
 
-  const drawDeclareArea = () => {
+  const drawDeclared = () => {
+    for (let i = 0; i < 2; i += 1) {
+      const element =
+        centerArea.querySelectorAll(".declared-cards")[i ^ game.turn % 2];
+      element.innerHTML = game.declared[i].map((halfSetNum) =>
+        cardStrToDiv(CARD_MAP[6 * halfSetNum])
+      );
+    }
   };
 
   const drawHands = () => {
@@ -588,9 +601,9 @@ const onLoad = () => {
     declareBtn.classList.remove("vis-hidden");
 
     setHand(hand);
-    drawDeclareArea();
+    drawDeclared();
     if (declared) {
-      declared.forEach(addDeclared);
+      game.declared = declared;
     }
     handCounts.forEach(setHandCount);
     setTurn(turn);
@@ -610,6 +623,13 @@ const onLoad = () => {
     },
     false
   );
+
+  socket.on("game:play:declare", (declaration, seat, result) => {
+    // TODO: add drawing of the declaration
+
+    game.declared[seat % 2 ^ Number(result)].push(declaration.halfSet);
+    drawDeclared();
+  });
 
   startBtn.addEventListener(
     "click",
