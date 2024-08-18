@@ -20,6 +20,7 @@ const onLoad = () => {
   const playerSelf = document.getElementById("player-self");
   const selfName = document.getElementById("self-name");
   const startBtn = document.getElementById("start-btn");
+  const resetBtn = document.getElementById("reset-btn");
   const actionArea = document.getElementById("action-area");
   const centerArea = document.getElementById("center-area");
   const declareArea = document.getElementById("declare-area");
@@ -138,6 +139,7 @@ const onLoad = () => {
     askCardDiv.innerHTML = "";
     askResultDiv.classList.remove("success", "failure");
 
+    resetBtn.classList.add("hidden");
     if (host) {
       startBtn.classList.remove("hidden");
     }
@@ -596,6 +598,7 @@ const onLoad = () => {
   };
 
   socket.on("game:play:start", ({ declared, handCounts, turn }, hand) => {
+    resetBtn.classList.add("hidden");
     startBtn.classList.add("hidden");
 
     declareBtn.classList.remove("vis-hidden");
@@ -612,7 +615,6 @@ const onLoad = () => {
     drawHands();
     drawSelfHand();
     drawTurn();
-
   });
 
   socket.on(
@@ -641,7 +643,19 @@ const onLoad = () => {
     false
   );
 
-  const drawResult = () => {};
+  resetBtn.addEventListener(
+    "click",
+    () => {
+      resetGame();
+    },
+    false
+  );
+
+  const drawResult = () => {
+    if (host) {
+      resetBtn.classList.remove("hidden");
+    }
+  };
 
   socket.on("game:play:end", () => {
     drawResult();
