@@ -94,6 +94,10 @@ const applyDeclare = (hands, declaration) => {
     });
 };
 
+const gameOver = (game) =>
+  game.declared[0].length + game.declared[1].length >
+  DECKS[game.maxPlayers].size / 6 / 2;
+
 export {
   validateCard,
   validateCardRequest,
@@ -103,4 +107,5 @@ export {
   validateDeclare,
   declareSuccess,
   applyDeclare,
+  gameOver,
 };
