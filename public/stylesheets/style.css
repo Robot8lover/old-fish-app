@@ -298,6 +298,14 @@ input.player-name#self-name {
   width: 80%;
 }
 
+#center-area {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
 #center-area .declared-cards {
   display: flex;
   flex-flow: row wrap;
