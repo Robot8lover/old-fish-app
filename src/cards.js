@@ -52,4 +52,55 @@ const makeHands = (maxPlayers) => {
   return hands.map((handArr) => new Set(handArr));
 };
 
-export { validateCard, validateCardRequest, validateMaxPlayers, shuffleArray, makeHands };
+const validateDeclare = (game, declaration) => {
+  if (
+    typeof declaration.halfSet !== "number" ||
+    !Array.isArray(declaration.declares) ||
+    declaration.declares.length === 6
+  ) {
+    return false;
+  }
+
+  const team = declaration.declares[0] % 2;
+  if (
+    declaration.halfSet < 0 ||
+    declaration.halfSet >= DECKS[game.maxPlayers].size ||
+    declaration.declares.some(
+      (seat) => seat < 0 || seat >= game.maxPlayers || seat % 2 !== team
+    )
+  ) {
+    return false;
+  }
+
+  return true;
+};
+
+const declareSuccess = (hands, declaration) => {
+  for (let i = 0; i < 6; i += 1) {
+    const card = 6 * declaration.halfSet + i;
+    const seat = declaration.declares[i];
+    if (!hands[seat].has(card)) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const applyDeclare = (hands, declaration) => {
+  [0, 1, 2, 3, 4, 5]
+    .map((offset) => 6 * declaration.halfSet + offset)
+    .forEach((card) => {
+      hands.forEach((hand) => hand.delete(card));
+    });
+};
+
+export {
+  validateCard,
+  validateCardRequest,
+  validateMaxPlayers,
+  shuffleArray,
+  makeHands,
+  validateDeclare,
+  declareSuccess,
+  applyDeclare,
+};
