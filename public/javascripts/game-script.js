@@ -501,16 +501,6 @@ const onLoad = () => {
   };
 
   const drawDeclareArea = () => {
-    // FIXME: Make them actually visible rather than crammed together.
-    /*declareArea.innerHTML = "";
-    for (const halfSet of HALF_SETS.slice(0, NUM_HALF_SETS[game.maxPlayers])) {
-      const element = document.createElement("div");
-      element.className = "half-set";
-      for (const cardStr of halfSet) {
-        element.innerHTML += cardStrToDiv(cardStr);
-      }
-      declareArea.appendChild(element);
-    }*/
   };
 
   const drawHands = () => {
