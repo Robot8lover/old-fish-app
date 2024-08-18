@@ -601,16 +601,18 @@ const onLoad = () => {
     declareBtn.classList.remove("vis-hidden");
 
     setHand(hand);
-    drawDeclared();
     if (declared) {
       game.declared = declared;
     }
     handCounts.forEach(setHandCount);
     setTurn(turn);
 
+    drawDeclared();
+
     drawHands();
     drawSelfHand();
     drawTurn();
+
   });
 
   socket.on(
