@@ -56,7 +56,7 @@ const validateDeclare = (game, declaration) => {
   if (
     typeof declaration.halfSet !== "number" ||
     !Array.isArray(declaration.declares) ||
-    declaration.declares.length === 6
+    declaration.declares.length !== 6
   ) {
     return false;
   }
@@ -64,7 +64,7 @@ const validateDeclare = (game, declaration) => {
   const team = declaration.declares[0] % 2;
   if (
     declaration.halfSet < 0 ||
-    declaration.halfSet >= DECKS[game.maxPlayers].size ||
+    declaration.halfSet >= Math.floor(DECKS[game.maxPlayers].size / 6) ||
     declaration.declares.some(
       (seat) => seat < 0 || seat >= game.maxPlayers || seat % 2 !== team
     )

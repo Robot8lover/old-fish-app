@@ -635,7 +635,7 @@ const onLoad = () => {
   socket.on("game:play:declare", (declaration, seat, result) => {
     // TODO: add drawing of the declaration
 
-    game.declared[seat % 2 ^ Number(result)].push(declaration.halfSet);
+    game.declared[seat % 2 ^ Number(!result)].push(declaration.halfSet);
     drawDeclared();
   });
 

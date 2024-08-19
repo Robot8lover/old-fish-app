@@ -1,8 +1,10 @@
 .card {
   background-image: url("../images/playingCards.png");
   background-repeat: no-repeat;
-  /*max-*/height: 190px;
-  /*max-*/width: 140px;
+  max-height: 190px;
+  max-width: 140px;
+  height: 190px;
+  width: 140px;
 }
 
 .card.card-CT {
