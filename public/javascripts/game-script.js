@@ -200,7 +200,7 @@ const onLoad = () => {
           if (
             game.handCounts[seat] > 0 &&
             (index % 2 === 0 ||
-              game.handCounts.every((v, i) => i % 2 === 0 || v > 0))
+              game.handCounts.every((v, i) => i % 2 !== (game.seat % 2) || v === 0))
           ) {
             socket.emit("game:play:transfer", game.gameId, seat);
           }
@@ -624,6 +624,10 @@ const onLoad = () => {
       handCounts.forEach(setHandCount);
       drawHands();
       drawSelfHand();
+
+      if (game.turn === game.seat && game.handCounts[game.seat] === 0) {
+        transferBtn.classList.remove("vis-hidden");
+      }
     },
     false
   );
@@ -701,6 +705,7 @@ const onLoad = () => {
       requestBtn.classList.remove("vis-hidden");
     } else {
       requestBtn.classList.add("vis-hidden");
+      transferBtn.classList.add("vis-hidden");
     }
   });
 
