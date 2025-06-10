@@ -193,7 +193,7 @@ const onLoad = () => {
         case MODES.REQUEST:
           if (selectedCard !== -1 && index % 2 === 1) {
             socket.emit("game:play:ask", game.gameId, selectedCard, seat);
-            resetMode();
+            modeObj.resetMode();
             selectedCard = -1;
           }
           break;
