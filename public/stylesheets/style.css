@@ -231,6 +231,10 @@ input.player-name#self-name {
   width: 140px;
 }
 
+#player-self .player-cards .card:hover {
+  z-index: 1;
+}
+
 .player-turn {
   position: absolute;
   right: 0.1em;
