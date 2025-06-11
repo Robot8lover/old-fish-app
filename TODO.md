@@ -2,8 +2,8 @@
 
 ## Important
 
-- Add emit for hand changes after declares and successful requests.
 - Fix red joker card again, I see the border is gone.
+- Fix drawing of center declares to avoid overflow (ow flexboxes and other fun things).
 
 
 ## Nice things for later
