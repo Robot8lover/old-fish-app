@@ -423,8 +423,6 @@ const onLoad = () => {
         )
         .map((v) => 6 * v)
       
-      // TODO: add declare send button to actually emit the event and all
-
       declareOptions.innerHTML = halfSetBases
         .map((card) => cardStrToDiv(CARD_MAP[card]))
         .join("");
@@ -637,7 +635,7 @@ const onLoad = () => {
   socket.on("game:play:declare", (declaration, seat, result) => {
     // TODO: add drawing of the declaration
 
-    game.declared[seat % 2 ^ Number(!result)].push(declaration.halfSet);
+    game.declared[(seat % 2) ^ Number(result) ^ game.seat].push(declaration.halfSet);
     drawDeclared();
   });
 
