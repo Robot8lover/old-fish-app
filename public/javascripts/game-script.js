@@ -638,6 +638,9 @@ const onLoad = () => {
 
     game.declared[seat % 2 ^ Number(!result)].push(declaration.halfSet);
     drawDeclared();
+
+    // why is this part not working
+    console.log(declareOptions.removeChild(declareOptions.getElementsByClassName(`card-${CARD_MAP[declaration.halfSet * 6]}`)[0]))
   });
 
   startBtn.addEventListener(
