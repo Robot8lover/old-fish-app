@@ -415,13 +415,14 @@ const onLoad = () => {
 
       const halfSetBases = new Array(NUM_HALF_SETS[game.maxPlayers])
         .fill(0)
-        .map((v, i) => 6 * i)
+        .map((_v, i) => i)
         .filter(
           (setIndex) =>
             !game.declared[0].includes(setIndex) &&
             !game.declared[1].includes(setIndex)
-        );
-
+        )
+        .map((v) => 6 * v)
+      
       // TODO: add declare send button to actually emit the event and all
 
       declareOptions.innerHTML = halfSetBases
@@ -638,9 +639,6 @@ const onLoad = () => {
 
     game.declared[seat % 2 ^ Number(!result)].push(declaration.halfSet);
     drawDeclared();
-
-    // why is this part not working
-    console.log(declareOptions.removeChild(declareOptions.getElementsByClassName(`card-${CARD_MAP[declaration.halfSet * 6]}`)[0]))
   });
 
   startBtn.addEventListener(
