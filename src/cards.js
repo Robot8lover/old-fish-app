@@ -68,7 +68,11 @@ const validateDeclare = (game, declaration) => {
     !validateCard(declaration.halfSet * 6, game.maxPlayers) ||
     game.hands.every((hand) => !hand.has(declaration.halfSet * 6)) ||
     declaration.declares.some(
-      (seat) => typeof seat !== "number" || seat < 0 || seat >= game.maxPlayers || seat % 2 !== team
+      (seat) =>
+        typeof seat !== "number" ||
+        seat < 0 ||
+        seat >= game.maxPlayers ||
+        seat % 2 !== team
     )
   ) {
     return false;

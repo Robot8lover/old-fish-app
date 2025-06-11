@@ -201,7 +201,9 @@ const onLoad = () => {
           if (
             game.handCounts[seat] > 0 &&
             (index % 2 === 0 ||
-              game.handCounts.every((v, i) => i % 2 !== (game.seat % 2) || v === 0))
+              game.handCounts.every(
+                (v, i) => i % 2 !== game.seat % 2 || v === 0
+              ))
           ) {
             socket.emit("game:play:transfer", game.gameId, seat);
           }
@@ -421,8 +423,8 @@ const onLoad = () => {
             !game.declared[0].includes(setIndex) &&
             !game.declared[1].includes(setIndex)
         )
-        .map((v) => 6 * v)
-      
+        .map((v) => 6 * v);
+
       declareOptions.innerHTML = halfSetBases
         .map((card) => cardStrToDiv(CARD_MAP[card]))
         .join("");
@@ -635,7 +637,9 @@ const onLoad = () => {
   socket.on("game:play:declare", (declaration, seat, result) => {
     // TODO: add drawing of the declaration
 
-    game.declared[(seat % 2) ^ Number(result) ^ game.seat].push(declaration.halfSet);
+    game.declared[seat % 2 ^ Number(result) ^ game.seat].push(
+      declaration.halfSet
+    );
     drawDeclared();
   });
 
