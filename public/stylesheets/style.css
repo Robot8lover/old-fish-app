@@ -316,6 +316,10 @@ input.player-name#self-name {
   overflow: hidden;
 }
 
+#center-area .declared-cards .card {
+  width: 50px;
+}
+
 #game-right {
   position: relative;
 
