@@ -516,7 +516,7 @@ const onLoad = () => {
         centerArea.querySelectorAll(".declared-cards")[i ^ game.turn % 2];
       element.innerHTML = game.declared[i].map((halfSetNum) =>
         cardStrToDiv(CARD_MAP[6 * halfSetNum])
-      );
+      ).join("");
     }
   };
 
@@ -637,6 +637,7 @@ const onLoad = () => {
   socket.on("game:play:declare", (declaration, seat, result) => {
     // TODO: add drawing of the declaration
 
+    // FIXME: This usually makes They get it but not always.
     game.declared[(seat % 2) ^ game.seat ^ Number(!result)].push(
       declaration.halfSet
     );
