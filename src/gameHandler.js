@@ -164,6 +164,9 @@ const registerPlayHandlers = (io, socket) => {
 
     emitUpdateCards(gameId);
 
+    // TODO: confirm that this goes to the right team
+    game.declared[(seat % 2) ^ Number(!result)].push(declaration.halfSet)
+
     if (gameOver(game)) {
       game.playing = false;
       emitToGame(gameId, "game:play:end"); // let them compute result i guess?
